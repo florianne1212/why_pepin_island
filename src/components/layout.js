@@ -50,15 +50,15 @@ const Layout = ({ children }) => {
 	`)
 
 	const darkTheme = {
-    background: "#000",
-    text: "#fff",
-		red: '#ea291e',
+    background: "#773344",
+    text: "#F5E9E2",
+		blue: '#11737E',
 	}
 
 	const lightTheme = {
-    background: "#fff",
-    text: "#000",
-		red: '#ea291e', 
+    background: "#F5E9E2",
+    text: "#773344",
+		blue: '#11737E', 
   }
 
   const {currentTheme} = useGlobalStateContext()

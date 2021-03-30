@@ -1,6 +1,7 @@
 import styled from 'styled-components'
+import {motion} from 'framer-motion'
 
-export const HeaderNav = styled.div `
+export const HeaderNav = styled(motion.div) `
     height: 0px;
     width: 100%;
     position: absolute;
@@ -20,8 +21,8 @@ export const Logo = styled.div `
     span {
         height: 1rem;
         width: 1rem;
-        background: #ea291e;
-        color: ${props => props.theme.red};
+        background: ${props => props.theme.blue};
+        color: ${props => props.theme.blue};
         margin: 0 4px;
         border-radius: 100%;
         display: inline-block;

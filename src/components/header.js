@@ -8,16 +8,11 @@ import { Container, Flex } from '../styles/globalStyles.js'
 //context
 import {useGlobalStateContext, useGlobalDispatchContext } from '../context/globalContext'
 
-useEffect (() => {
-	effect
-	return () => {
-		cleanup
-	};
-}, [input]);
+
 
 const Header = () => {
 	const dispatch = useGlobalDispatchContext()
-	const {currentTheme} = useGlobalStateContext()
+	const { currentTheme } = useGlobalStateContext()
 
 	const toggleTheme = () => {
 		if (currentTheme === 'dark'){
@@ -26,16 +21,22 @@ const Header = () => {
 			dispatch({type: 'TOGGLE_THEME', theme: 'dark'})
 		}
 	}
-	
+
+	useEffect (() => {
+	window.localStorage.setItem('theme', currentTheme)
+	}, [currentTheme]);
+
 	return (
-		<HeaderNav>
+		<HeaderNav
+			animate={{y: 0, opacity: 1}}
+			initial={{y: 72, opacity: 0}}
+		>
 			<Container>
-					{console.log(currentTheme)}
 				<Flex spaceBetween noHeight>
 					<Logo>
-						<Link to='/'>FURR</Link>
+						<Link to='/'>FL</Link>
 						<span onClick={toggleTheme}></span>
-						<Link to='/'>W</Link>	
+						<Link to='/'>RIANNE</Link>	
 					</Logo>
 					<Menu>
 						<button>
