@@ -17,6 +17,11 @@ import Cursor from './customCursor'
 import {useGlobalStateContext} from '../context/globalContext'
 
 const GlobalStyle = createGlobalStyle`
+
+	html, body {
+		height: 100%;
+	}
+	
 	${normalize}
 	* {
 		text-decoration: none;
@@ -31,6 +36,7 @@ const GlobalStyle = createGlobalStyle`
 	
 
 	body {
+		
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 		background : ${props => props.theme.background};
 		overscroll-behavior: none;

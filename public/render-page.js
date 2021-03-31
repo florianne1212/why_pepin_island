@@ -13651,6 +13651,11 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const GlobalStyle = styled_components__WEBPACK_IMPORTED_MODULE_7__.createGlobalStyle`
+
+	html, body {
+		height: 100%;
+	}
+	
 	${styled_normalize__WEBPACK_IMPORTED_MODULE_3__.normalize}
 	* {
 		text-decoration: none;
@@ -13665,6 +13670,7 @@ const GlobalStyle = styled_components__WEBPACK_IMPORTED_MODULE_7__.createGlobalS
 	
 
 	body {
+		
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 		background : ${props => props.theme.background};
 		overscroll-behavior: none;
@@ -13872,7 +13878,7 @@ const Flex = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConf
 })(["position:relative;display:flex;align-items:center;", " ", " ", " ", ""], props => props.spaceBetween && (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.css)(["justify-content:space-between;"]), props => props.flexEnd && (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.css)(["justify-content:flex-end;"]), props => props.alignTop && (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.css)(["align-items:top;"]), props => props.noHeight && (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.css)(["height:0;"]));
 const Cursor = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
   displayName: "globalStyles__Cursor"
-})(["position:absolute;top:0;left:0;width:32px;height:32px;background:", ";border-radius:100%;transform:translate(-50%,-50%);transition:all .1s ease-in-out;transition-property:width,height,border;will-change:width,height,transform,border;pointer-events:none;z-index:999;"], props => props.theme.blue);
+})(["position:absolute;top:0;left:0;width:32px;height:32px;background:", ";border-radius:100%;transform:translate(-50%,-50%);transition:all 0.01s ease-in-out;transition-property:width,height,border;will-change:width,height,transform,border;pointer-events:none;z-index:999;"], props => props.theme.blue);
 
 /***/ }),
 
