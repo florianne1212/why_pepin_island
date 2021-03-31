@@ -10,24 +10,25 @@ import { normalize } from "styled-normalize";
 //components
 
 import Header from './header'
+import Cursor from './customCursor'
 
 //context
 
 import {useGlobalStateContext} from '../context/globalContext'
 
 const GlobalStyle = createGlobalStyle`
-${normalize}
-		* {
-			text-decoration: none;
-			/* cursor : none; */
-		}
-
-		html {
-			box-sizing: border-box;
-			-webkit-font-smoothing: antialised;
-			font-size: 16px
-		}
+	${normalize}
+	* {
+		text-decoration: none;
+		cursor: none !important;
 	}
+
+	html {
+		box-sizing: border-box;
+		-webkit-font-smoothing: antialised;
+		font-size: 16px
+	}
+	
 
 	body {
 		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -65,6 +66,7 @@ const Layout = ({ children }) => {
 
 	return (
 		<ThemeProvider theme={currentTheme === 'dark'? darkTheme : lightTheme}>
+			<Cursor />
 			<Header />
 			<GlobalStyle />
 			<main>{children}</main>

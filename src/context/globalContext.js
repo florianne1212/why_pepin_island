@@ -26,12 +26,13 @@ export const GlobalProvider = ({ children }) => {
           ? window.localStorage.getItem("theme") === null
             ? "dark"
             : window.localStorage.getItem("theme")
-          : "dark",
-      cursorType: false,
-      cursorStyles: ["pointer", "hovered"],
+        : "light",
+    cursorType: false,
+    cursorStyles: ["pointer", "hovered"],
     })
 // export const GlobalProvider = ({children}) => {
 //     const [state, dispatch] = useReducer (globalReducer, {
+//         typeof window !== "undefined"? window.localStorage.getItem("theme") === null,
 //         currentTheme: window.localStorage.getItem('theme') == null ? 'dark' : window.localStorage.getItem('theme'),
 //     })
 
