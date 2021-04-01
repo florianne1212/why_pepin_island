@@ -10,7 +10,7 @@ import {useGlobalStateContext, useGlobalDispatchContext } from '../context/globa
 
 
 
-const Header = () => {
+const Header = ({onCursor}) => {
 	const dispatch = useGlobalDispatchContext()
 	const { currentTheme } = useGlobalStateContext()
 
@@ -33,7 +33,10 @@ const Header = () => {
 		>
 			<Container>
 				<Flex spaceBetween noHeight>
-					<Logo>
+					<Logo
+						onMouseEnter={() => onCursor("hovered")}
+						onMouseLeave={onCursor}
+					>
 						<Link to='/'>FL</Link>
 						<span onClick={toggleTheme}></span>
 						<Link to='/'>RIANNE</Link>	

@@ -13504,6 +13504,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _styles_globalStyles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../styles/globalStyles */ "./src/styles/globalStyles.js");
+/* harmony import */ var _context_globalContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/globalContext */ "./src/context/globalContext.js");
+
+ //context
 
 
 
@@ -13534,6 +13537,7 @@ const CustomCursor = () => {
     };
   }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_1__.Cursor, {
+    className: `{$!!cursorType ? 'hovered': ''} ${cursorType}`,
     style: {
       left: `${mousePosition.x}px`,
       top: `${mousePosition.y}px`
@@ -13570,7 +13574,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const Header = () => {
+const Header = ({
+  onCursor
+}) => {
   const dispatch = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_4__.useGlobalDispatchContext)();
   const {
     currentTheme
@@ -13605,7 +13611,10 @@ const Header = () => {
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles_js__WEBPACK_IMPORTED_MODULE_3__.Container, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles_js__WEBPACK_IMPORTED_MODULE_3__.Flex, {
     spaceBetween: true,
     noHeight: true
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_headerStyles_js__WEBPACK_IMPORTED_MODULE_2__.Logo, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__.Link, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_headerStyles_js__WEBPACK_IMPORTED_MODULE_2__.Logo, {
+    onMouseEnter: () => onCursor("hovered"),
+    onMouseLeave: onCursor
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__.Link, {
     to: "/"
   }, "FL"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
     onClick: toggleTheme
@@ -13693,11 +13702,24 @@ const Layout = ({
     blue: '#11737E'
   };
   const {
-    currentTheme
+    currentTheme,
+    cursorStyles
   } = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_6__.useGlobalStateContext)();
+  const dispatch = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_6__.useGlobalDispatchContext)();
+
+  const onCursor = cursorType => {
+    cursorType = cursorStyles.includes(cursorType) && cursorType || false;
+    dispatch({
+      type: 'CURSOR_TYPE',
+      cursorType: cursorType
+    });
+  };
+
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(styled_components__WEBPACK_IMPORTED_MODULE_7__.ThemeProvider, {
     theme: currentTheme === 'dark' ? darkTheme : lightTheme
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_customCursor__WEBPACK_IMPORTED_MODULE_5__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_header__WEBPACK_IMPORTED_MODULE_4__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(GlobalStyle, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("main", null, children));
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(GlobalStyle, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_customCursor__WEBPACK_IMPORTED_MODULE_5__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_header__WEBPACK_IMPORTED_MODULE_4__.default, {
+    onCursor: onCursor
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("main", null, children));
 };
 
 Layout.propTypes = {
@@ -13732,7 +13754,14 @@ const globalReducer = (state, action) => {
     case 'TOGGLE_THEME':
       {
         return { ...state,
-          currentTheme: action.theme
+          cursorType: action.theme
+        };
+      }
+
+    case 'CURSOR_TYPE':
+      {
+        return { ...state,
+          currentTheme: action.cursorType
         };
       }
 

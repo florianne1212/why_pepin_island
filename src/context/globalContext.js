@@ -10,7 +10,13 @@ const globalReducer = (state, action) => {
         case 'TOGGLE_THEME': {
             return {
                 ...state,
-                currentTheme: action.theme
+                cursorType: action.theme,
+            }
+        }
+        case 'CURSOR_TYPE': {
+            return {
+                ...state,
+                currentTheme: action.cursorType,
             }
         }
         default: {
@@ -27,8 +33,8 @@ export const GlobalProvider = ({ children }) => {
             ? "dark"
             : window.localStorage.getItem("theme")
         : "light",
-    cursorType: false,
-    cursorStyles: ["pointer", "hovered"],
+        cursorType: false,
+        cursorStyles: ["pointer", "hovered"],
     })
 // export const GlobalProvider = ({children}) => {
 //     const [state, dispatch] = useReducer (globalReducer, {
