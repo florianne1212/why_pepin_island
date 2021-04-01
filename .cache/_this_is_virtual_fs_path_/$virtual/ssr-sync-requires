@@ -4,8 +4,8 @@
   
 
 exports.ssrComponents = {
-  "component---cache-dev-404-page-js": preferDefault(require("/home/user42/website/.cache/dev-404-page.js")),
-  "component---src-pages-404-js": preferDefault(require("/home/user42/website/src/pages/404.js")),
-  "component---src-pages-index-js": preferDefault(require("/home/user42/website/src/pages/index.js"))
+  "component---cache-dev-404-page-js": preferDefault(require("/home/user42/website3/.cache/dev-404-page.js")),
+  "component---src-pages-404-js": preferDefault(require("/home/user42/website3/src/pages/404.js")),
+  "component---src-pages-index-js": preferDefault(require("/home/user42/website3/src/pages/index.js"))
   }
 

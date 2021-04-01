@@ -18,9 +18,9 @@ import {useGlobalStateContext, useGlobalDispatchContext} from '../context/global
 
 const GlobalStyle = createGlobalStyle`
 
-	html, body {
-		height: 100%;
-	}
+	//html, body {
+	//	height: 100%;
+	//}
 	
 	${normalize}
 	* {

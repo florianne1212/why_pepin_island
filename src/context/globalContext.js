@@ -6,49 +6,44 @@ const GlobalDispatchContext = createContext()
 
 //reducer
 const globalReducer = (state, action) => {
-    switch(action.type) {
-        case 'TOGGLE_THEME': {
-            return {
-                ...state,
-                cursorType: action.theme,
-            }
-        }
-        case 'CURSOR_TYPE': {
-            return {
-                ...state,
-                currentTheme: action.cursorType,
-            }
-        }
-        default: {
-            throw new Error(`Unhandled action type : $(action.type)`)
-        }
-    }
+	switch(action.type) {
+		case 'TOGGLE_THEME': {
+			return {
+				...state,
+				currentTheme: action.theme,
+			}
+		}
+		case 'CURSOR_TYPE': {
+			return {
+				...state,
+				cursorType: action.cursorType,
+			}
+		}
+		default: {
+			throw new Error(`Unhandled action type : $(action.type)`)
+		}
+	}
 }
 
 export const GlobalProvider = ({ children }) => {
-    const [state, dispatch] = useReducer(globalReducer, {
-      currentTheme:
-        typeof window !== "undefined"
-          ? window.localStorage.getItem("theme") === null
-            ? "dark"
-            : window.localStorage.getItem("theme")
-        : "light",
-        cursorType: false,
-        cursorStyles: ["pointer", "hovered"],
-    })
-// export const GlobalProvider = ({children}) => {
-//     const [state, dispatch] = useReducer (globalReducer, {
-//         typeof window !== "undefined"? window.localStorage.getItem("theme") === null,
-//         currentTheme: window.localStorage.getItem('theme') == null ? 'dark' : window.localStorage.getItem('theme'),
-//     })
+	const [state, dispatch] = useReducer(globalReducer, {
+	  currentTheme:
+		typeof window !== "undefined"
+		  ? window.localStorage.getItem("theme") === null
+			? "dark"
+			: window.localStorage.getItem("theme")
+		  : "dark",
+	  cursorType: false,
+	  cursorStyles: ["pointer", "hovered"],
+	})
 
-    return (
-        <GlobalDispatchContext.Provider value={dispatch}>
-            <GlobalStateContext.Provider value={state}>
-                {children}
-            </GlobalStateContext.Provider>
-        </GlobalDispatchContext.Provider>
-    )
+	return (
+		<GlobalDispatchContext.Provider value={dispatch}>
+			<GlobalStateContext.Provider value={state}>
+				{children}
+			</GlobalStateContext.Provider>
+		</GlobalDispatchContext.Provider>
+	)
 }
 
 //custom hoooks to use dispatch and state
