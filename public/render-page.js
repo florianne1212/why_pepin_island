@@ -13645,18 +13645,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _styles_homeStyles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../styles/homeStyles */ "./src/styles/homeStyles.js");
+/* harmony import */ var _assets_video_video_mp4__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/video/video.mp4 */ "./src/assets/video/video.mp4");
+/* harmony import */ var _styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../styles/homeStyles */ "./src/styles/homeStyles.js");
+
 
 
 
 const HomeBanner = () => {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_1__.Banner, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_1__.Video, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("video", {
-    height: "100%",
-    width: "100%",
-    loop: true,
-    autoPlay: true,
-    src: __webpack_require__(/*! ../../assets/video/video.mp4 */ "./src/assets/video/video.mp4")
-  })));
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Banner, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Video, null));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (HomeBanner);
