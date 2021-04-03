@@ -16,3 +16,25 @@ export const Video = styled.div `
 		object-fit: cover;
 	}
 `
+export const Canvas = styled.canvas `
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	display: block;
+`
+
+export const BannerTitle = styled.h1 `
+	position: absolute;
+	bottom: -120px;
+	left: -18px;
+	color: ${props => props.theme.text};
+	pointer-events: none;
+`
+
+export const Headline = styled.span `
+	display: block;
+	font-size: 23rem;
+	font-weight: 900;
+	line-height: 0.76;
+`
