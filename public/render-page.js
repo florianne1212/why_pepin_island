@@ -13645,26 +13645,88 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _assets_video_video_mp4__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/video/video.mp4 */ "./src/assets/video/video.mp4");
+/* harmony import */ var _assets_video_pepin_island_mp4__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/video/pepin_island.mp4 */ "./src/assets/video/pepin_island.mp4");
 /* harmony import */ var _styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../styles/homeStyles */ "./src/styles/homeStyles.js");
+/* harmony import */ var _context_globalContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../context/globalContext */ "./src/context/globalContext.js");
+/* harmony import */ var _hooks_useWindowSize__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useWindowSize */ "./src/hooks/useWindowSize.js");
+
+
+ //context
+
+ //custom hook
 
 
 
-
-const HomeBanner = () => {
+const HomeBanner = ({
+  onCursor
+}) => {
   let canvas = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(null);
+  const size = (0,_hooks_useWindowSize__WEBPACK_IMPORTED_MODULE_4__.default)();
+  const {
+    currentTheme
+  } = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_3__.useGlobalStateContext)();
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
     let renderingElement = canvas.current;
     let drawingElement = renderingElement.cloneNode();
-    let drawingCtx = drawingElement.getContect('2d');
-    let renderingCtx = renderingElement.getContect('2d');
+    let drawingCtx = drawingElement.getContext('2d');
+    let renderingCtx = renderingElement.getContext('2d');
     let lastX;
     let lastY;
     let moving = false;
-    renderingCtx.globalCompositeOperation = 'source-over';
-    renderingCtx.fillStyle = '#000000';
-    renderingCtx.fillRect(0, 0, 100, 100);
-  }, [canvas]);
+    renderingCtx.globalCompositeOperation = "source-over";
+    renderingCtx.fillStyle = currentTheme === 'dark' ? '#000000' : '#ffffff';
+    renderingCtx.fillRect(0, 0, size.width, size.height);
+    renderingElement.addEventListener('mouseover', e => {
+      moving = true;
+      lastX = e.pageX - renderingElement.offsetLeft;
+      lastY = e.pageY - renderingElement.offsetTop;
+    });
+    renderingElement.addEventListener('mouseup', e => {
+      moving = false;
+      lastX = e.pageX - renderingElement.offsetLeft;
+      lastY = e.pageY - renderingElement.offsetTop;
+    });
+    renderingElement.addEventListener('mousemove', e => {
+      if (moving) {
+        drawingCtx.globalCompositeOperation = "source-over";
+        renderingCtx.globalCompositeOperation = "destination-out";
+        let currentX = e.pageX - renderingElement.offsetLeft;
+        let currentY = e.pageY - renderingElement.offsetTop;
+        drawingCtx.lineJoin = "round";
+        drawingCtx.moveTo(lastX, lastY);
+        drawingCtx.lineTo(currentX, currentY);
+        drawingCtx.closePath();
+        drawingCtx.lineWidth = 60;
+        drawingCtx.stroke();
+        lastX = currentX;
+        lastY = currentY;
+        renderingCtx.drawImage(drawingElement, 0, 0);
+      }
+    });
+  }, [currentTheme]);
+  const container = {
+    initial: {
+      y: 800
+    },
+    animate: {
+      y: 0,
+      transition: {
+        staggerChildren: 0.2
+      }
+    }
+  };
+  const item = {
+    initial: {
+      y: 800
+    },
+    animate: {
+      y: 0,
+      transition: {
+        duration: 1,
+        ease: [0.6, 0.05, -0.01, 0.9]
+      }
+    }
+  };
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Banner, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Video, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("video", {
     width: "100%",
     height: "100%",
@@ -13673,9 +13735,23 @@ const HomeBanner = () => {
     controls: true,
     muted: true
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("source", {
-    src: _assets_video_video_mp4__WEBPACK_IMPORTED_MODULE_1__.default,
+    src: _assets_video_pepin_island_mp4__WEBPACK_IMPORTED_MODULE_1__.default,
     type: "video/mp4"
-  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Canvas, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.BannerTitle, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Headline, null, "DIG"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Headline, null, "DEEP")));
+  }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Canvas, {
+    height: size.height,
+    width: size.width,
+    ref: canvas,
+    onMouseEnter: () => onCursor("hovered"),
+    onMouseLeave: onCursor
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.BannerTitle, {
+    variants: container,
+    initial: "initial",
+    animate: "animate"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Headline, {
+    variants: item
+  }, "PEPIN"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Headline, {
+    variants: item
+  }, "ISLAND")));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (HomeBanner);
@@ -13850,6 +13926,49 @@ const useGlobalDispatchContext = () => (0,react__WEBPACK_IMPORTED_MODULE_0__.use
 
 /***/ }),
 
+/***/ "./src/hooks/useWindowSize.js":
+/*!************************************!*\
+  !*** ./src/hooks/useWindowSize.js ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ useWindowSize)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+function useWindowSize() {
+  function getSize() {
+    const isBrowser = typeof window !== 'undefined';
+    if (isBrowser) return {
+      width: window.innerWidth,
+      height: window.innerHeight
+    };else return {
+      width: 5,
+      height: 5
+    };
+  }
+
+  const {
+    0: windowSize,
+    1: setWindowSize
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(getSize);
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    function handleResize() {
+      setWindowSize(getSize());
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+  return windowSize;
+}
+
+/***/ }),
+
 /***/ "./src/pages/404.js":
 /*!**************************!*\
   !*** ./src/pages/404.js ***!
@@ -13923,14 +14042,44 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _components_layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/layout */ "./src/components/layout.js");
-/* harmony import */ var _components_homePage_HomeBanner__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../components/homePage/HomeBanner */ "./src/components/homePage/HomeBanner.js");
+/* harmony import */ var _context_globalContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/globalContext */ "./src/context/globalContext.js");
+/* harmony import */ var _components_homePage_HomeBanner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/homePage/HomeBanner */ "./src/components/homePage/HomeBanner.js");
+
+ //context
 
  //components
 
 
 
 const IndexPage = props => {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_layout__WEBPACK_IMPORTED_MODULE_1__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_homePage_HomeBanner__WEBPACK_IMPORTED_MODULE_2__.default, null));
+  const {
+    0: isClient,
+    1: setClient
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const key = isClient ? "client" : "server";
+  const {
+    currentTheme,
+    cursorStyles
+  } = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_2__.useGlobalStateContext)();
+  const dispatch = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_2__.useGlobalDispatchContext)();
+
+  const onCursor = cursorType => {
+    cursorType = cursorStyles.includes(cursorType) && cursorType || false;
+    dispatch({
+      type: 'CURSOR_TYPE',
+      cursorType: cursorType
+    });
+  };
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    setClient(true);
+  }, []);
+  if (!isClient) return null;
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    key: key
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_layout__WEBPACK_IMPORTED_MODULE_1__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_homePage_HomeBanner__WEBPACK_IMPORTED_MODULE_3__.default, {
+    onCursor: onCursor
+  })));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (IndexPage);
@@ -14009,6 +14158,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Headline": () => (/* binding */ Headline)
 /* harmony export */ });
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.esm.js");
+/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/render/dom/motion.js");
 
 
 const Banner = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
@@ -14020,12 +14170,12 @@ const Video = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withCon
 const Canvas = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.canvas.withConfig({
   displayName: "homeStyles__Canvas"
 })(["position:absolute;top:0;left:0;height:100%;display:block;"]);
-const BannerTitle = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.h1.withConfig({
+const BannerTitle = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.default)(framer_motion__WEBPACK_IMPORTED_MODULE_1__.motion.h1).withConfig({
   displayName: "homeStyles__BannerTitle"
 })(["position:absolute;bottom:-120px;left:-18px;color:", ";pointer-events:none;"], props => props.theme.text);
-const Headline = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.span.withConfig({
+const Headline = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.default)(framer_motion__WEBPACK_IMPORTED_MODULE_1__.motion.span).withConfig({
   displayName: "homeStyles__Headline"
-})(["display:block;font-size:23rem;font-weight:900;line-height:0.76;"]);
+})(["display:block;font-size:15rem;font-weight:900;line-height:0.76;"]);
 
 /***/ }),
 
@@ -26204,10 +26354,10 @@ exports.default = _default;
 
 /***/ }),
 
-/***/ "./src/assets/video/video.mp4":
-/*!************************************!*\
-  !*** ./src/assets/video/video.mp4 ***!
-  \************************************/
+/***/ "./src/assets/video/pepin_island.mp4":
+/*!*******************************************!*\
+  !*** ./src/assets/video/pepin_island.mp4 ***!
+  \*******************************************/
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
@@ -26215,7 +26365,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "static/video-ec82f4649eb121a9949378671b8de45b.mp4");
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "static/pepin_island-5ec05a4921290281f2d9e8a8a469a05b.mp4");
 
 /***/ }),
 
@@ -26231,24 +26381,24 @@ module.exports = JSON.parse('{"data":{"site":{"siteMetadata":{"title":"My Gatsby
 /***/ }),
 
 /***/ "react-dom/server":
-/*!*************************************************************************!*\
-  !*** external "/home/user42/website3/node_modules/react-dom/server.js" ***!
-  \*************************************************************************/
+/*!******************************************************************************!*\
+  !*** external "/home/user42/website_03_04/node_modules/react-dom/server.js" ***!
+  \******************************************************************************/
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("/home/user42/website3/node_modules/react-dom/server.js");;
+module.exports = require("/home/user42/website_03_04/node_modules/react-dom/server.js");;
 
 /***/ }),
 
 /***/ "react":
-/*!********************************************************************!*\
-  !*** external "/home/user42/website3/node_modules/react/index.js" ***!
-  \********************************************************************/
+/*!*************************************************************************!*\
+  !*** external "/home/user42/website_03_04/node_modules/react/index.js" ***!
+  \*************************************************************************/
 /***/ ((module) => {
 
 "use strict";
-module.exports = require("/home/user42/website3/node_modules/react/index.js");;
+module.exports = require("/home/user42/website_03_04/node_modules/react/index.js");;
 
 /***/ }),
 

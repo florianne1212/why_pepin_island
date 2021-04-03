@@ -16,15 +16,15 @@ export const Video = styled.div `
 		object-fit: cover;
 	}
 `
-export const Canvas = styled.canvas `
-	position: absolute;
-	top: 0;
-	left: 0;
-	height: 100%;
-	display: block;
+export const Canvas = styled.canvas`
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  display: block;
 `
 
-export const BannerTitle = styled.h1 `
+export const BannerTitle = styled(motion.h1) `
 	position: absolute;
 	bottom: -120px;
 	left: -18px;
@@ -32,9 +32,9 @@ export const BannerTitle = styled.h1 `
 	pointer-events: none;
 `
 
-export const Headline = styled.span `
+export const Headline = styled(motion.span) `
 	display: block;
-	font-size: 23rem;
+	font-size: 15rem;
 	font-weight: 900;
 	line-height: 0.76;
 `
