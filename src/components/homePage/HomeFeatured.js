@@ -48,7 +48,7 @@ const HomeFeatured = ({onCursor}) => {
 			}}
 		>
 			<Container>
-				<Link>
+				<Link href="https://www.nzsothebysrealty.com/purchasing/property/NEL00334/pepin-island-875-cable-bay-road-nelson/">
 					<FeaturedContent 
 						onHoverStart={() => setHovered(!hovered)}
 						onHoverEnd={() => setHovered(!hovered)}
@@ -56,18 +56,18 @@ const HomeFeatured = ({onCursor}) => {
 						onMouseLeave={onCursor}
 					>
 						<Flex spaceBetween>
-							<h3>Featured Project</h3>
+							<h3>This could be our island</h3>
 							<motion.div 
 								animate={{opacity: hovered? 1 : 0}}
 								transition={{duraton:0.6, ease: [0.6, 0.05, -0.01, 0.9]}}
 								className="meta"
 							>
-								<h4>PEI Seafood</h4>
-								<h4>2019</h4>
+								<h4>PEPIN</h4>
+								<h4>ISLAND</h4>
 							</motion.div>
 						</Flex>
 						<h2 className="featured-title">
-							NOT <br /> HUMBLE
+							BUY <br /> PEPIN ISLAND
 							<span className="arrow">
 								<motion.svg 
 									animate={{x: hovered? 48 : 0}}
@@ -94,7 +94,7 @@ const HomeFeatured = ({onCursor}) => {
 					</FeaturedVideo>
 				</Link>
 			</Container>
-			<Container>
+			{/* <Container>
 				<FeaturedProjects>
 					<Flex flexEnd>
 						<button>
@@ -102,7 +102,7 @@ const HomeFeatured = ({onCursor}) => {
 						</button>
 					</Flex>
 				</FeaturedProjects>
-			</Container>
+			</Container> */}
 		</HomeFeaturedSection>
 	)
 }

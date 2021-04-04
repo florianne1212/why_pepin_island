@@ -15,6 +15,7 @@
 exports.ssrComponents = {
   "component---cache-dev-404-page-js": preferDefault(__webpack_require__(/*! ./.cache/dev-404-page.js */ "./.cache/dev-404-page.js")),
   "component---src-pages-404-js": preferDefault(__webpack_require__(/*! ./src/pages/404.js */ "./src/pages/404.js")),
+  "component---src-pages-buy-island-js": preferDefault(__webpack_require__(/*! ./src/pages/buy-island.js */ "./src/pages/buy-island.js")),
   "component---src-pages-index-js": preferDefault(__webpack_require__(/*! ./src/pages/index.js */ "./src/pages/index.js"))
   }
 
@@ -14381,14 +14382,16 @@ const HomeFeatured = ({
         y: 72
       }
     }
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__.Container, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__.Link, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_3__.FeaturedContent, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__.Container, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__.Link, {
+    href: "https://www.nzsothebysrealty.com/purchasing/property/NEL00334/pepin-island-875-cable-bay-road-nelson/"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_3__.FeaturedContent, {
     onHoverStart: () => setHovered(!hovered),
     onHoverEnd: () => setHovered(!hovered),
     onMouseEnter: () => onCursor('hovered'),
     onMouseLeave: onCursor
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__.Flex, {
     spaceBetween: true
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "Featured Project"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_6__.motion.div, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "This could be our island"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_6__.motion.div, {
     animate: {
       opacity: hovered ? 1 : 0
     },
@@ -14397,9 +14400,9 @@ const HomeFeatured = ({
       ease: [0.6, 0.05, -0.01, 0.9]
     },
     className: "meta"
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "PEI Seafood"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "2019"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "PEPIN"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "ISLAND"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
     className: "featured-title"
-  }, "NOT ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), " HUMBLE", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+  }, "BUY ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), " PEPIN ISLAND", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
     className: "arrow"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_6__.motion.svg, {
     animate: {
@@ -14420,9 +14423,7 @@ const HomeFeatured = ({
     autoPlay: true,
     muted: true,
     src: __webpack_require__(/*! ../../assets/video/pepin-home.mp4 */ "./src/assets/video/pepin-home.mp4").default
-  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__.Container, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_3__.FeaturedProjects, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__.Flex, {
-    flexEnd: true
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, "All projects"))))));
+  })))));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (HomeFeatured);
@@ -14572,7 +14573,7 @@ __webpack_require__.r(__webpack_exports__);
 const navRoutes = [{
   id: 0,
   title: 'fresh produce',
-  path: '/not-humble',
+  path: '/buy-island',
   video: "pepin-fresh.mp4"
 }, {
   id: 1,
@@ -14586,7 +14587,7 @@ const navRoutes = [{
   video: "pepin-nelson.mp4"
 }, {
   id: 3,
-  title: 'sheep',
+  title: 'there is sheep',
   path: '/it-takes-an-island',
   video: "pepin-sheep.mp4"
 }, {
@@ -14645,7 +14646,7 @@ const Navigation = ({
       key: route.id
     })
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__.Link, {
-    to: `/projects/{route.path}`
+    to: `/buy-island`
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_5__.motion.div, {
     initial: {
       x: -108
@@ -14871,6 +14872,67 @@ const NotFoundPage = () => {
 
 /***/ }),
 
+/***/ "./src/pages/buy-island.js":
+/*!*********************************!*\
+  !*** ./src/pages/buy-island.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _styles_buyIsland__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../styles/buyIsland */ "./src/styles/buyIsland.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.esm.js");
+/* harmony import */ var styled_normalize__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! styled-normalize */ "./node_modules/styled-normalize/dist/index.js");
+/* harmony import */ var gatsby__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! gatsby */ "./.cache/gatsby-browser-entry.js");
+
+
+
+
+
+const GlobalStyle = styled_components__WEBPACK_IMPORTED_MODULE_4__.createGlobalStyle`
+
+	//html, body {
+	//	height: 100%;
+	//}
+	
+	${styled_normalize__WEBPACK_IMPORTED_MODULE_2__.normalize}
+	* {
+		text-decoration: none;
+	}
+
+	html {
+		box-sizing: border-box;
+		-webkit-font-smoothing: antialised;
+		font-size: 16px
+	}
+	
+
+	body {
+		
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+		background : #F5E9E2;
+		overscroll-behavior: none;
+		overflow-x: hidden
+	}
+`;
+
+const Buy = () => {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(GlobalStyle, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_buyIsland__WEBPACK_IMPORTED_MODULE_1__.Main, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("a", {
+    href: "https://www.nzsothebysrealty.com/purchasing/property/NEL00334/pepin-island-875-cable-bay-road-nelson/"
+  }, "Just Buy the island"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_buyIsland__WEBPACK_IMPORTED_MODULE_1__.Home, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(gatsby__WEBPACK_IMPORTED_MODULE_3__.Link, {
+    to: "/"
+  }, "FL", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null), "RIANNE")));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Buy);
+
+/***/ }),
+
 /***/ "./src/pages/index.js":
 /*!****************************!*\
   !*** ./src/pages/index.js ***!
@@ -14932,6 +14994,29 @@ const IndexPage = props => {
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (IndexPage);
+
+/***/ }),
+
+/***/ "./src/styles/buyIsland.js":
+/*!*********************************!*\
+  !*** ./src/styles/buyIsland.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Main": () => (/* binding */ Main),
+/* harmony export */   "Home": () => (/* binding */ Home)
+/* harmony export */ });
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.esm.js");
+
+const Main = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
+  displayName: "buyIsland__Main"
+})(["display:flex;align-items:center;justify-content:center;width:100%;height:100vh;color:#11737E;h2{color:#11737E;a{width:500px;height:50px;color:#11737E;}}"]);
+const Home = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
+  displayName: "buyIsland__Home"
+})(["height:0px;width:100%;position:absolute;top:72px;right:50px;left:0;z-index:99;a{font-size:1.8rem;font-weight:800;color:black;}span{height:1rem;width:1rem;background:#11737E;color:#11737E;margin:0 4px;border-radius:100%;display:inline-block;position:relative;bottom:2px;}"]);
 
 /***/ }),
 
@@ -15075,22 +15160,22 @@ __webpack_require__.r(__webpack_exports__);
 
 const Nav = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.default)(framer_motion__WEBPACK_IMPORTED_MODULE_1__.motion.div).withConfig({
   displayName: "navigationStyles__Nav"
-})(["position:fixed;top:0;width:100%;height:100%;display:block;background:", ";color:#000;z-index:100;overflow:hidden;"], props => props.theme.blue);
+})(["position:fixed;top:0;width:100%;height:100%;display:block;background:", ";color:#000;z-index:100;overflow:hidden;"], props => props.theme.background);
 const NavHeader = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
   displayName: "navigationStyles__NavHeader"
-})(["top:72px;position:relative;h2{color:", ";}"], props => props.theme.background);
+})(["top:72px;position:relative;h2{color:", ";}"], props => props.theme.blue);
 const CloseNav = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
   displayName: "navigationStyles__CloseNav"
-})(["button{transform-origin:center;border:none;padding:20px;background:none;outline:none;span{width:36px;height:8px;display:block;background:", ";margin:8px;}}"], props => props.theme.background);
+})(["button{transform-origin:center;border:none;padding:20px;background:none;outline:none;span{width:36px;height:8px;display:block;background:", ";margin:8px;}}"], props => props.theme.blue);
 const NavList = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
   displayName: "navigationStyles__NavList"
-})(["height:100%;width:100%;display:flex;align-items:center;ul{padding:0;li{list-style:none;font-size:3rem;text-transform:uppercase;font-weight:900;height:96px;line-height:96px;overflow:hidden;;.link{color:", ";position:relative;display:flex;align-items:center;.arrow{height:76px;margin-right:8px;svg{width:100px;path{fill:", ";}}}}}}"], props => props.theme.background, props => props.theme.background);
+})(["height:100%;width:100%;display:flex;align-items:center;ul{padding:0;li{list-style:none;font-size:3rem;text-transform:uppercase;font-weight:900;height:96px;line-height:96px;overflow:hidden;;.link{color:", ";position:relative;display:flex;align-items:center;.arrow{height:76px;margin-right:8px;svg{width:100px;path{fill:", ";}}}}}}"], props => props.theme.blue, props => props.theme.blue);
 const NavFooter = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
   displayName: "navigationStyles__NavFooter"
 })([""]);
 const NavVideo = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
   displayName: "navigationStyles__NavVideo"
-})(["position:absolute;top:0;bottom:0;left:28%;z-index:-1;width:100%;height:100%;background:#000;.reveal{width:100%;background:", ";position:absolute;top:0;left:0;bottom:0;}.video{background:#000;position:absolute;height:100%;margin:0%;z-index:-1;video{height:100%;}}"], props => props.theme.blue);
+})(["position:absolute;top:0;bottom:0;left:28%;z-index:-1;width:100%;height:100%;background:#000;.reveal{width:100%;background:", ";position:absolute;top:0;left:0;bottom:0;}.video{background:#000;position:absolute;height:100%;margin:0%;z-index:-1;video{height:100%;}}"], props => props.theme.background);
 
 /***/ }),
 

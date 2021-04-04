@@ -7,7 +7,7 @@ export const Nav = styled(motion.div)`
 	width: 100%;
 	height: 100%;
 	display: block;
-	background: ${props => props.theme.blue};
+	background: ${props => props.theme.background};
 	color: #000;
 	z-index: 100;
 	overflow: hidden;
@@ -17,7 +17,7 @@ export const NavHeader = styled.div`
 	top: 72px;
 	position: relative;
 	h2 {
-		color: ${props => props.theme.background};
+		color: ${props => props.theme.blue};
 	}
 
 `
@@ -33,7 +33,7 @@ export const CloseNav = styled.div`
 			width:36px;
 			height: 8px;
 			display: block;
-			background: ${props => props.theme.background};
+			background: ${props => props.theme.blue};
 			margin: 8px;
 		}
 	}
@@ -55,8 +55,7 @@ export const NavList = styled.div`
 			line-height: 96px;
 			overflow: hidden;;
 			.link{
-				//background: ${props => props.theme.blue};
-				color: ${props => props.theme.background};
+				color: ${props => props.theme.blue};
 				position: relative;
 				display: flex;
 				align-items: center;
@@ -66,7 +65,7 @@ export const NavList = styled.div`
 					svg {
 						width: 100px;
 						path {
-							fill: ${props => props.theme.background};
+							fill: ${props => props.theme.blue};
 						}
 					}
 				}
@@ -89,7 +88,7 @@ export const NavVideo = styled.div`
 	background: #000;
 	.reveal{
 		width: 100%;
-		background: ${props => props.theme.blue};
+		background: ${props => props.theme.background};
 		position: absolute;
 		top: 0;
 		left: 0;

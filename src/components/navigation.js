@@ -19,7 +19,7 @@ const navRoutes = [
 	{
 		id: 0,
 		title: 'fresh produce',
-		path:'/not-humble',
+		path:'/buy-island',
 		video: "pepin-fresh.mp4",
 	},
 	{
@@ -36,7 +36,7 @@ const navRoutes = [
 	},
 	{
 		id: 3,
-		title: 'sheep',
+		title: 'there is sheep',
 		path:'/it-takes-an-island',
 		video: "pepin-sheep.mp4",
 	},
@@ -107,7 +107,7 @@ const Navigation = ({toggleMenu, setToggleMenu, onCursor}) => {
 													})
 												}
 											>
-												<Link to={`/projects/{route.path}`}>
+												<Link to={`/buy-island`}>
 													<motion.div 
 														initial={{ x: -108}}
 														whileHover={{ x: -40, 
