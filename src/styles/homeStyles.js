@@ -38,3 +38,9 @@ export const Headline = styled(motion.span) `
 	font-weight: 900;
 	line-height: 0.76;
 `
+
+//content section
+
+export const HomeContentSection = styled.div``
+
+export const Content = styled.h2``

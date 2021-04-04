@@ -10,7 +10,7 @@ import {useGlobalStateContext, useGlobalDispatchContext } from '../context/globa
 
 
 
-const Header = ({onCursor}) => {
+const Header = ({onCursor, toggleMenu, setToggleMenu}) => {
 	const dispatch = useGlobalDispatchContext()
 	const { currentTheme } = useGlobalStateContext()
 
@@ -45,7 +45,7 @@ const Header = ({onCursor}) => {
 						></span>
 						<Link to='/'>RIANNE</Link>	
 					</Logo>
-					<Menu>
+					<Menu onClick={() => setToggleMenu(!toggleMenu)}>
 						<button>
 							<span></span>
 							<span></span>

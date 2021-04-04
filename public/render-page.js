@@ -2381,6 +2381,290 @@ function startAnimation(key, value, target, transition) {
 
 /***/ }),
 
+/***/ "./node_modules/framer-motion/dist/es/components/AnimatePresence/PresenceChild.js":
+/*!****************************************************************************************!*\
+  !*** ./node_modules/framer-motion/dist/es/components/AnimatePresence/PresenceChild.js ***!
+  \****************************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "PresenceChild": () => (/* binding */ PresenceChild)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _context_PresenceContext_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../context/PresenceContext.js */ "./node_modules/framer-motion/dist/es/context/PresenceContext.js");
+/* harmony import */ var _utils_use_constant_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/use-constant.js */ "./node_modules/framer-motion/dist/es/utils/use-constant.js");
+
+
+
+
+
+var presenceId = 0;
+function getPresenceId() {
+    var id = presenceId;
+    presenceId++;
+    return id;
+}
+var PresenceChild = function (_a) {
+    var children = _a.children, initial = _a.initial, isPresent = _a.isPresent, onExitComplete = _a.onExitComplete, custom = _a.custom, presenceAffectsLayout = _a.presenceAffectsLayout;
+    var presenceChildren = (0,_utils_use_constant_js__WEBPACK_IMPORTED_MODULE_1__.useConstant)(newChildrenMap);
+    var id = (0,_utils_use_constant_js__WEBPACK_IMPORTED_MODULE_1__.useConstant)(getPresenceId);
+    var context = (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(function () { return ({
+        id: id,
+        initial: initial,
+        isPresent: isPresent,
+        custom: custom,
+        onExitComplete: function (childId) {
+            presenceChildren.set(childId, true);
+            var allComplete = true;
+            presenceChildren.forEach(function (isComplete) {
+                if (!isComplete)
+                    allComplete = false;
+            });
+            allComplete && (onExitComplete === null || onExitComplete === void 0 ? void 0 : onExitComplete());
+        },
+        register: function (childId) {
+            presenceChildren.set(childId, false);
+            return function () { return presenceChildren.delete(childId); };
+        },
+    }); }, 
+    /**
+     * If the presence of a child affects the layout of the components around it,
+     * we want to make a new context value to ensure they get re-rendered
+     * so they can detect that layout change.
+     */
+    presenceAffectsLayout ? undefined : [isPresent]);
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useMemo)(function () {
+        presenceChildren.forEach(function (_, key) { return presenceChildren.set(key, false); });
+    }, [isPresent]);
+    /**
+     * If there's no `motion` components to fire exit animations, we want to remove this
+     * component immediately.
+     */
+    react__WEBPACK_IMPORTED_MODULE_0__.useEffect(function () {
+        !isPresent && !presenceChildren.size && (onExitComplete === null || onExitComplete === void 0 ? void 0 : onExitComplete());
+    }, [isPresent]);
+    return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(_context_PresenceContext_js__WEBPACK_IMPORTED_MODULE_2__.PresenceContext.Provider, { value: context }, children));
+};
+function newChildrenMap() {
+    return new Map();
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/framer-motion/dist/es/components/AnimatePresence/index.js":
+/*!********************************************************************************!*\
+  !*** ./node_modules/framer-motion/dist/es/components/AnimatePresence/index.js ***!
+  \********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "AnimatePresence": () => (/* binding */ AnimatePresence)
+/* harmony export */ });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! tslib */ "./node_modules/framer-motion/node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_use_force_update_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../utils/use-force-update.js */ "./node_modules/framer-motion/dist/es/utils/use-force-update.js");
+/* harmony import */ var _PresenceChild_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./PresenceChild.js */ "./node_modules/framer-motion/dist/es/components/AnimatePresence/PresenceChild.js");
+/* harmony import */ var _context_SharedLayoutContext_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../context/SharedLayoutContext.js */ "./node_modules/framer-motion/dist/es/context/SharedLayoutContext.js");
+
+
+
+
+
+
+
+function getChildKey(child) {
+    return child.key || "";
+}
+function updateChildLookup(children, allChildren) {
+    var seenChildren =  true ? new Set() : 0;
+    children.forEach(function (child) {
+        var key = getChildKey(child);
+        if ( true && seenChildren) {
+            if (seenChildren.has(key)) {
+                console.warn("Children of AnimatePresence require unique keys. \"" + key + "\" is a duplicate.");
+            }
+            seenChildren.add(key);
+        }
+        allChildren.set(key, child);
+    });
+}
+function onlyElements(children) {
+    var filtered = [];
+    // We use forEach here instead of map as map mutates the component key by preprending `.$`
+    react__WEBPACK_IMPORTED_MODULE_0__.Children.forEach(children, function (child) {
+        if ((0,react__WEBPACK_IMPORTED_MODULE_0__.isValidElement)(child))
+            filtered.push(child);
+    });
+    return filtered;
+}
+/**
+ * `AnimatePresence` enables the animation of components that have been removed from the tree.
+ *
+ * When adding/removing more than a single child, every child **must** be given a unique `key` prop.
+ *
+ * @library
+ *
+ * Any `Frame` components that have an `exit` property defined will animate out when removed from
+ * the tree.
+ *
+ * ```jsx
+ * import { Frame, AnimatePresence } from 'framer'
+ *
+ * // As items are added and removed from `items`
+ * export function Items({ items }) {
+ *   return (
+ *     <AnimatePresence>
+ *       {items.map(item => (
+ *         <Frame
+ *           key={item.id}
+ *           initial={{ opacity: 0 }}
+ *           animate={{ opacity: 1 }}
+ *           exit={{ opacity: 0 }}
+ *         />
+ *       ))}
+ *     </AnimatePresence>
+ *   )
+ * }
+ * ```
+ *
+ * You can sequence exit animations throughout a tree using variants.
+ *
+ * @motion
+ *
+ * Any `motion` components that have an `exit` property defined will animate out when removed from
+ * the tree.
+ *
+ * ```jsx
+ * import { motion, AnimatePresence } from 'framer-motion'
+ *
+ * export const Items = ({ items }) => (
+ *   <AnimatePresence>
+ *     {items.map(item => (
+ *       <motion.div
+ *         key={item.id}
+ *         initial={{ opacity: 0 }}
+ *         animate={{ opacity: 1 }}
+ *         exit={{ opacity: 0 }}
+ *       />
+ *     ))}
+ *   </AnimatePresence>
+ * )
+ * ```
+ *
+ * You can sequence exit animations throughout a tree using variants.
+ *
+ * If a child contains multiple `motion` components with `exit` props, it will only unmount the child
+ * once all `motion` components have finished animating out. Likewise, any components using
+ * `usePresence` all need to call `safeToRemove`.
+ *
+ * @public
+ */
+var AnimatePresence = function (_a) {
+    var children = _a.children, custom = _a.custom, _b = _a.initial, initial = _b === void 0 ? true : _b, onExitComplete = _a.onExitComplete, exitBeforeEnter = _a.exitBeforeEnter, _c = _a.presenceAffectsLayout, presenceAffectsLayout = _c === void 0 ? true : _c;
+    // We want to force a re-render once all exiting animations have finished. We
+    // either use a local forceRender function, or one from a parent context if it exists.
+    var forceRender = (0,_utils_use_force_update_js__WEBPACK_IMPORTED_MODULE_1__.useForceUpdate)();
+    var layoutContext = (0,react__WEBPACK_IMPORTED_MODULE_0__.useContext)(_context_SharedLayoutContext_js__WEBPACK_IMPORTED_MODULE_2__.SharedLayoutContext);
+    if ((0,_context_SharedLayoutContext_js__WEBPACK_IMPORTED_MODULE_2__.isSharedLayout)(layoutContext)) {
+        forceRender = layoutContext.forceUpdate;
+    }
+    var isInitialRender = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(true);
+    // Filter out any children that aren't ReactElements. We can only track ReactElements with a props.key
+    var filteredChildren = onlyElements(children);
+    // Keep a living record of the children we're actually rendering so we
+    // can diff to figure out which are entering and exiting
+    var presentChildren = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(filteredChildren);
+    // A lookup table to quickly reference components by key
+    var allChildren = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(new Map())
+        .current;
+    // A living record of all currently exiting components.
+    var exiting = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(new Set()).current;
+    updateChildLookup(filteredChildren, allChildren);
+    // If this is the initial component render, just deal with logic surrounding whether
+    // we play onMount animations or not.
+    if (isInitialRender.current) {
+        isInitialRender.current = false;
+        return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, filteredChildren.map(function (child) { return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(_PresenceChild_js__WEBPACK_IMPORTED_MODULE_3__.PresenceChild, { key: getChildKey(child), isPresent: true, initial: initial ? undefined : false, presenceAffectsLayout: presenceAffectsLayout }, child)); })));
+    }
+    // If this is a subsequent render, deal with entering and exiting children
+    var childrenToRender = (0,tslib__WEBPACK_IMPORTED_MODULE_4__.__spreadArray)([], (0,tslib__WEBPACK_IMPORTED_MODULE_4__.__read)(filteredChildren));
+    // Diff the keys of the currently-present and target children to update our
+    // exiting list.
+    var presentKeys = presentChildren.current.map(getChildKey);
+    var targetKeys = filteredChildren.map(getChildKey);
+    // Diff the present children with our target children and mark those that are exiting
+    var numPresent = presentKeys.length;
+    for (var i = 0; i < numPresent; i++) {
+        var key = presentKeys[i];
+        if (targetKeys.indexOf(key) === -1) {
+            exiting.add(key);
+        }
+        else {
+            // In case this key has re-entered, remove from the exiting list
+            exiting.delete(key);
+        }
+    }
+    // If we currently have exiting children, and we're deferring rendering incoming children
+    // until after all current children have exiting, empty the childrenToRender array
+    if (exitBeforeEnter && exiting.size) {
+        childrenToRender = [];
+    }
+    // Loop through all currently exiting components and clone them to overwrite `animate`
+    // with any `exit` prop they might have defined.
+    exiting.forEach(function (key) {
+        // If this component is actually entering again, early return
+        if (targetKeys.indexOf(key) !== -1)
+            return;
+        var child = allChildren.get(key);
+        if (!child)
+            return;
+        var insertionIndex = presentKeys.indexOf(key);
+        var onExit = function () {
+            allChildren.delete(key);
+            exiting.delete(key);
+            // Remove this child from the present children
+            var removeIndex = presentChildren.current.findIndex(function (presentChild) { return presentChild.key === key; });
+            presentChildren.current.splice(removeIndex, 1);
+            // Defer re-rendering until all exiting children have indeed left
+            if (!exiting.size) {
+                presentChildren.current = filteredChildren;
+                forceRender();
+                onExitComplete && onExitComplete();
+            }
+        };
+        childrenToRender.splice(insertionIndex, 0, react__WEBPACK_IMPORTED_MODULE_0__.createElement(_PresenceChild_js__WEBPACK_IMPORTED_MODULE_3__.PresenceChild, { key: getChildKey(child), isPresent: false, onExitComplete: onExit, custom: custom, presenceAffectsLayout: presenceAffectsLayout }, child));
+    });
+    // Add `MotionContext` even to children that don't need it to ensure we're rendering
+    // the same tree between renders
+    childrenToRender = childrenToRender.map(function (child) {
+        var key = child.key;
+        return exiting.has(key) ? (child) : (react__WEBPACK_IMPORTED_MODULE_0__.createElement(_PresenceChild_js__WEBPACK_IMPORTED_MODULE_3__.PresenceChild, { key: getChildKey(child), isPresent: true, presenceAffectsLayout: presenceAffectsLayout }, child));
+    });
+    presentChildren.current = childrenToRender;
+    if ( true &&
+        exitBeforeEnter &&
+        childrenToRender.length > 1) {
+        console.warn("You're attempting to animate multiple children within AnimatePresence, but its exitBeforeEnter prop is set to true. This will lead to odd visual behaviour.");
+    }
+    return (react__WEBPACK_IMPORTED_MODULE_0__.createElement(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, exiting.size
+        ? childrenToRender
+        : childrenToRender.map(function (child) { return (0,react__WEBPACK_IMPORTED_MODULE_0__.cloneElement)(child); })));
+};
+
+
+
+
+/***/ }),
+
 /***/ "./node_modules/framer-motion/dist/es/components/AnimatePresence/use-presence.js":
 /*!***************************************************************************************!*\
   !*** ./node_modules/framer-motion/dist/es/components/AnimatePresence/use-presence.js ***!
@@ -10257,6 +10541,39 @@ function useConstant(init) {
 
 /***/ }),
 
+/***/ "./node_modules/framer-motion/dist/es/utils/use-force-update.js":
+/*!**********************************************************************!*\
+  !*** ./node_modules/framer-motion/dist/es/utils/use-force-update.js ***!
+  \**********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useForceUpdate": () => (/* binding */ useForceUpdate)
+/* harmony export */ });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! tslib */ "./node_modules/framer-motion/node_modules/tslib/tslib.es6.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _use_unmount_effect_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./use-unmount-effect.js */ "./node_modules/framer-motion/dist/es/utils/use-unmount-effect.js");
+
+
+
+
+function useForceUpdate() {
+    var unloadingRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)(false);
+    var _a = (0,tslib__WEBPACK_IMPORTED_MODULE_1__.__read)((0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(0), 2), forcedRenderCount = _a[0], setForcedRenderCount = _a[1];
+    (0,_use_unmount_effect_js__WEBPACK_IMPORTED_MODULE_2__.useUnmountEffect)(function () { return (unloadingRef.current = true); });
+    return (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function () {
+        !unloadingRef.current && setForcedRenderCount(forcedRenderCount + 1);
+    }, [forcedRenderCount]);
+}
+
+
+
+
+/***/ }),
+
 /***/ "./node_modules/framer-motion/dist/es/utils/use-isomorphic-effect.js":
 /*!***************************************************************************!*\
   !*** ./node_modules/framer-motion/dist/es/utils/use-isomorphic-effect.js ***!
@@ -13510,7 +13827,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-const CustomCursor = () => {
+const CustomCursor = ({
+  toggleMenu
+}) => {
   const {
     cursorType
   } = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_2__.useGlobalStateContext)();
@@ -13540,7 +13859,7 @@ const CustomCursor = () => {
     };
   }, []);
   return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_1__.Cursor, {
-    className: `{$!!cursorType ? 'hovered': ''} ${cursorType}`,
+    className: `${!!cursorType ? 'hovered' : ''} ${cursorType} ${toggleMenu ? 'nav-open' : ""}`,
     style: {
       left: `${mousePosition.x}px`,
       top: `${mousePosition.y}px`
@@ -13578,7 +13897,9 @@ __webpack_require__.r(__webpack_exports__);
 
 
 const Header = ({
-  onCursor
+  onCursor,
+  toggleMenu,
+  setToggleMenu
 }) => {
   const dispatch = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_4__.useGlobalDispatchContext)();
   const {
@@ -13625,7 +13946,9 @@ const Header = ({
     onMouseLeave: onCursor
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__.Link, {
     to: "/"
-  }, "RIANNE")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_headerStyles_js__WEBPACK_IMPORTED_MODULE_2__.Menu, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null))))));
+  }, "RIANNE")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_headerStyles_js__WEBPACK_IMPORTED_MODULE_2__.Menu, {
+    onClick: () => setToggleMenu(!toggleMenu)
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null))))));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Header);
@@ -13645,7 +13968,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _assets_video_pepin_island_mp4__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/video/pepin_island.mp4 */ "./src/assets/video/pepin_island.mp4");
+/* harmony import */ var _assets_video_pepin_home_mp4__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../assets/video/pepin-home.mp4 */ "./src/assets/video/pepin-home.mp4");
 /* harmony import */ var _styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../styles/homeStyles */ "./src/styles/homeStyles.js");
 /* harmony import */ var _context_globalContext__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../context/globalContext */ "./src/context/globalContext.js");
 /* harmony import */ var _hooks_useWindowSize__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../hooks/useWindowSize */ "./src/hooks/useWindowSize.js");
@@ -13732,10 +14055,9 @@ const HomeBanner = ({
     height: "100%",
     loop: true,
     autoPlay: true,
-    controls: true,
     muted: true
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("source", {
-    src: _assets_video_pepin_island_mp4__WEBPACK_IMPORTED_MODULE_1__.default,
+    src: _assets_video_pepin_home_mp4__WEBPACK_IMPORTED_MODULE_1__.default,
     type: "video/mp4"
   }))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Canvas, {
     height: size.height,
@@ -13758,6 +14080,33 @@ const HomeBanner = ({
 
 /***/ }),
 
+/***/ "./src/components/homePage/HomeContent.js":
+/*!************************************************!*\
+  !*** ./src/components/homePage/HomeContent.js ***!
+  \************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _styles_globalStyles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../styles/globalStyles */ "./src/styles/globalStyles.js");
+/* harmony import */ var _styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../styles/homeStyles */ "./src/styles/homeStyles.js");
+
+
+
+
+const HomeContent = () => {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(HomeContent, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_1__.Container, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Content, null, "Pepin Island is 3.5 kilometres long, and up to 2.1 kilometres wide. ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "It measures 5.18 square kilometresin area. The highest point is Stuart Hill, which rises to 401 metres. The island is located on the northeast coast of Tasman Bay / Te Tai-o-Aorere, with the smaller indentation of Delaware Bay to the east. It is joined to the mainland by a naturally formed pathway made from boulders that have tumbled down nearby hillsides then been shaped into a causeway by the sea.")));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (HomeContent);
+
+/***/ }),
+
 /***/ "./src/components/layout.js":
 /*!**********************************!*\
   !*** ./src/components/layout.js ***!
@@ -13774,11 +14123,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_1__);
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! prop-types */ "./node_modules/prop-types/index.js");
 /* harmony import */ var prop_types__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(prop_types__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.esm.js");
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.esm.js");
 /* harmony import */ var styled_normalize__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! styled-normalize */ "./node_modules/styled-normalize/dist/index.js");
 /* harmony import */ var _header__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./header */ "./src/components/header.js");
 /* harmony import */ var _customCursor__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./customCursor */ "./src/components/customCursor.js");
-/* harmony import */ var _context_globalContext__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../context/globalContext */ "./src/context/globalContext.js");
+/* harmony import */ var _navigation__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./navigation */ "./src/components/navigation.js");
+/* harmony import */ var _context_globalContext__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../context/globalContext */ "./src/context/globalContext.js");
 
 
 
@@ -13787,10 +14137,11 @@ __webpack_require__.r(__webpack_exports__);
  //components
 
 
+
  //context
 
 
-const GlobalStyle = styled_components__WEBPACK_IMPORTED_MODULE_7__.createGlobalStyle`
+const GlobalStyle = styled_components__WEBPACK_IMPORTED_MODULE_8__.createGlobalStyle`
 
 	//html, body {
 	//	height: 100%;
@@ -13835,8 +14186,8 @@ const Layout = ({
   const {
     currentTheme,
     cursorStyles
-  } = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_6__.useGlobalStateContext)();
-  const dispatch = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_6__.useGlobalDispatchContext)();
+  } = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_7__.useGlobalStateContext)();
+  const dispatch = (0,_context_globalContext__WEBPACK_IMPORTED_MODULE_7__.useGlobalDispatchContext)();
 
   const onCursor = cursorType => {
     cursorType = cursorStyles.includes(cursorType) && cursorType || false;
@@ -13846,9 +14197,21 @@ const Layout = ({
     });
   };
 
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(styled_components__WEBPACK_IMPORTED_MODULE_7__.ThemeProvider, {
+  const {
+    0: toggleMenu,
+    1: setToggleMenu
+  } = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(false);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(styled_components__WEBPACK_IMPORTED_MODULE_8__.ThemeProvider, {
     theme: currentTheme === 'dark' ? darkTheme : lightTheme
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(GlobalStyle, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_customCursor__WEBPACK_IMPORTED_MODULE_5__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_header__WEBPACK_IMPORTED_MODULE_4__.default, {
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(GlobalStyle, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_customCursor__WEBPACK_IMPORTED_MODULE_5__.default, {
+    toggleMenu: toggleMenu
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_header__WEBPACK_IMPORTED_MODULE_4__.default, {
+    onCursor: onCursor,
+    toggleMenu: toggleMenu,
+    setToggleMenu: setToggleMenu
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement(_navigation__WEBPACK_IMPORTED_MODULE_6__.default, {
+    toggleMenu: toggleMenu,
+    setToggleMenu: setToggleMenu,
     onCursor: onCursor
   }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("main", null, children));
 };
@@ -13857,6 +14220,164 @@ Layout.propTypes = {
   children: (prop_types__WEBPACK_IMPORTED_MODULE_2___default().node.isRequired)
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Layout);
+
+/***/ }),
+
+/***/ "./src/components/navigation.js":
+/*!**************************************!*\
+  !*** ./src/components/navigation.js ***!
+  \**************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var gatsby__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gatsby */ "./.cache/gatsby-browser-entry.js");
+/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/components/AnimatePresence/index.js");
+/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/render/dom/motion.js");
+/* harmony import */ var _styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../styles/globalStyles */ "./src/styles/globalStyles.js");
+/* harmony import */ var _styles_navigationStyles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../styles/navigationStyles */ "./src/styles/navigationStyles.js");
+
+
+ //styled components
+
+
+
+const navRoutes = [{
+  id: 0,
+  title: 'fresh produce',
+  path: '/not-humble',
+  video: "pepin-fresh.mp4"
+}, {
+  id: 1,
+  title: 'outdoor bathtub',
+  path: '/bleeping-easy',
+  video: "pepin-bathtub.mp4"
+}, {
+  id: 2,
+  title: '30 minutes drive to Nelson',
+  path: '/make-it-zero',
+  video: "pepin-nelson.mp4"
+}, {
+  id: 3,
+  title: 'sheep',
+  path: '/it-takes-an-island',
+  video: "pepin-sheep.mp4"
+}, {
+  id: 4,
+  title: 'connected to the land',
+  path: '/50-beaches',
+  video: "pepin-road.mp4"
+}];
+
+const Navigation = ({
+  toggleMenu,
+  setToggleMenu,
+  onCursor
+}) => {
+  const {
+    0: revealVideo,
+    1: setRevealVideo
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    show: false,
+    video: "pepin-sheep.mp4",
+    key: "0"
+  });
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement((react__WEBPACK_IMPORTED_MODULE_0___default().Fragment), null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_4__.AnimatePresence, null, toggleMenu && /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_navigationStyles__WEBPACK_IMPORTED_MODULE_3__.Nav, {
+    initial: {
+      x: '-100%'
+    },
+    exit: {
+      x: '-100%'
+    },
+    animate: {
+      x: toggleMenu ? 0 : '-100%'
+    },
+    transition: {
+      duration: 0.8,
+      ease: [0.6, 0.05, -0.01, 0.9]
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__.Container, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_navigationStyles__WEBPACK_IMPORTED_MODULE_3__.NavHeader, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__.Flex, {
+    spaceBetween: true,
+    noHeight: true
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", null, "Why Pepin Island ?"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_navigationStyles__WEBPACK_IMPORTED_MODULE_3__.CloseNav, {
+    onClick: () => setToggleMenu(!toggleMenu),
+    onMouseEnter: () => onCursor("pointer"),
+    onMouseLeave: onCursor
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_navigationStyles__WEBPACK_IMPORTED_MODULE_3__.NavList, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("ul", null, navRoutes.map(route => /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_5__.motion.li, {
+    onMouseEnter: () => onCursor("pointer"),
+    onMouseLeave: onCursor,
+    key: route.id,
+    onHoverStart: () => setRevealVideo({
+      show: true,
+      video: route.video,
+      key: route.id
+    }),
+    onHoverEnd: () => setRevealVideo({
+      show: false,
+      video: route.video,
+      key: route.id
+    })
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__.Link, {
+    to: `/projects/{route.path}`
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_5__.motion.div, {
+    initial: {
+      x: -108
+    },
+    whileHover: {
+      x: -40,
+      transition: {
+        duration: .4,
+        ease: [0.6, 0.05, -0.01, 0.9]
+      }
+    },
+    className: "link"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: "arrow"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("svg", {
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 101 57"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M33 34H0V24h81.429L66 7.884 73.548 0l19.877 20.763.027-.029L101 28.618 73.829 57l-7.548-7.884L80.753 34H33z",
+    fill: "#000",
+    fillRule: "evenodd"
+  }))), route.title)))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_navigationStyles__WEBPACK_IMPORTED_MODULE_3__.NavFooter, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_navigationStyles__WEBPACK_IMPORTED_MODULE_3__.NavVideo, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_5__.motion.div, {
+    animate: {
+      width: revealVideo.show ? 0 : '100%'
+    },
+    className: "reveal"
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("div", {
+    className: "video"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_4__.AnimatePresence, {
+    initial: false,
+    exitBeforeEnter: true
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_5__.motion.video, {
+    key: revealVideo.key,
+    src: __webpack_require__("./src/assets/video sync recursive ^\\.\\/.*$")(`./${revealVideo.video}`).default,
+    initial: {
+      opacity: 0
+    },
+    exit: {
+      opacity: 0
+    },
+    animate: {
+      opacity: 1
+    },
+    transition: {
+      duration: 0.2,
+      ease: "easeInOut"
+    },
+    loop: true,
+    autoPlay: true,
+    muted: true
+  }))))))));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (Navigation);
 
 /***/ }),
 
@@ -14044,10 +14565,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _components_layout__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../components/layout */ "./src/components/layout.js");
 /* harmony import */ var _context_globalContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/globalContext */ "./src/context/globalContext.js");
 /* harmony import */ var _components_homePage_HomeBanner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/homePage/HomeBanner */ "./src/components/homePage/HomeBanner.js");
+/* harmony import */ var _components_homePage_HomeContent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/homePage/HomeContent */ "./src/components/homePage/HomeContent.js");
 
  //context
 
  //components
+
 
 
 
@@ -14079,7 +14602,7 @@ const IndexPage = props => {
     key: key
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_layout__WEBPACK_IMPORTED_MODULE_1__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_homePage_HomeBanner__WEBPACK_IMPORTED_MODULE_3__.default, {
     onCursor: onCursor
-  })));
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_homePage_HomeContent__WEBPACK_IMPORTED_MODULE_4__.default, null)));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (IndexPage);
@@ -14109,7 +14632,7 @@ const Flex = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConf
 })(["position:relative;display:flex;align-items:center;", " ", " ", " ", ""], props => props.spaceBetween && (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.css)(["justify-content:space-between;"]), props => props.flexEnd && (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.css)(["justify-content:flex-end;"]), props => props.alignTop && (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.css)(["align-items:top;"]), props => props.noHeight && (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.css)(["height:0;"]));
 const Cursor = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
   displayName: "globalStyles__Cursor"
-})(["position:absolute;top:0;left:0;width:32px;height:32px;background:", ";border-radius:100%;transform:translate(-50%,-50%);transition:all 0.01s ease-in-out;transition-property:width,height,border;will-change:width,height,transform,border;pointer-events:none;z-index:999;&.pointer{background:transparent !important;width:56px;height:56px;border:4px solid ", " !important;}&.hovered{background:transparent !important;width:56px;height:56px;border:4px solid ", ";}"], props => props.theme.blue, props => props.theme.text, props => props.theme.blue);
+})(["position:absolute;top:0;left:0;width:32px;height:32px;background:", ";border-radius:100%;transform:translate(-50%,-50%);transition:all 0.01s ease-in-out;transition-property:width,height,border;will-change:width,height,transform,border;pointer-events:none;z-index:999;&.pointer{background:transparent !important;width:56px;height:56px;border:4px solid ", " !important;}&.hovered{background:transparent !important;width:56px;height:56px;border:4px solid ", ";}&.nav-open{background:", ";}"], props => props.theme.blue, props => props.theme.text, props => props.theme.blue, props => props.theme.text);
 
 /***/ }),
 
@@ -14155,7 +14678,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "Video": () => (/* binding */ Video),
 /* harmony export */   "Canvas": () => (/* binding */ Canvas),
 /* harmony export */   "BannerTitle": () => (/* binding */ BannerTitle),
-/* harmony export */   "Headline": () => (/* binding */ Headline)
+/* harmony export */   "Headline": () => (/* binding */ Headline),
+/* harmony export */   "HomeContentSection": () => (/* binding */ HomeContentSection),
+/* harmony export */   "Content": () => (/* binding */ Content)
 /* harmony export */ });
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.esm.js");
 /* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/render/dom/motion.js");
@@ -14175,7 +14700,55 @@ const BannerTitle = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.default)(f
 })(["position:absolute;bottom:-120px;left:-18px;color:", ";pointer-events:none;"], props => props.theme.text);
 const Headline = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.default)(framer_motion__WEBPACK_IMPORTED_MODULE_1__.motion.span).withConfig({
   displayName: "homeStyles__Headline"
-})(["display:block;font-size:15rem;font-weight:900;line-height:0.76;"]);
+})(["display:block;font-size:15rem;font-weight:900;line-height:0.76;"]); //content section
+
+const HomeContentSection = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
+  displayName: "homeStyles__HomeContentSection"
+})([""]);
+const Content = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.h2.withConfig({
+  displayName: "homeStyles__Content"
+})([""]);
+
+/***/ }),
+
+/***/ "./src/styles/navigationStyles.js":
+/*!****************************************!*\
+  !*** ./src/styles/navigationStyles.js ***!
+  \****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Nav": () => (/* binding */ Nav),
+/* harmony export */   "NavHeader": () => (/* binding */ NavHeader),
+/* harmony export */   "CloseNav": () => (/* binding */ CloseNav),
+/* harmony export */   "NavList": () => (/* binding */ NavList),
+/* harmony export */   "NavFooter": () => (/* binding */ NavFooter),
+/* harmony export */   "NavVideo": () => (/* binding */ NavVideo)
+/* harmony export */ });
+/* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.esm.js");
+/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/render/dom/motion.js");
+
+
+const Nav = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.default)(framer_motion__WEBPACK_IMPORTED_MODULE_1__.motion.div).withConfig({
+  displayName: "navigationStyles__Nav"
+})(["position:fixed;top:0;width:100%;height:100%;display:block;background:", ";color:#000;z-index:100;overflow:hidden;"], props => props.theme.blue);
+const NavHeader = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
+  displayName: "navigationStyles__NavHeader"
+})(["top:72px;position:relative;h2{color:", ";}"], props => props.theme.background);
+const CloseNav = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
+  displayName: "navigationStyles__CloseNav"
+})(["button{transform-origin:center;border:none;padding:20px;background:none;outline:none;span{width:36px;height:8px;display:block;background:", ";margin:8px;}}"], props => props.theme.background);
+const NavList = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
+  displayName: "navigationStyles__NavList"
+})(["height:100%;width:100%;display:flex;align-items:center;ul{padding:0;li{list-style:none;font-size:3rem;text-transform:uppercase;font-weight:900;height:96px;line-height:96px;overflow:hidden;;.link{color:", ";position:relative;display:flex;align-items:center;.arrow{height:76px;margin-right:8px;svg{width:100px;path{fill:", ";}}}}}}"], props => props.theme.background, props => props.theme.background);
+const NavFooter = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
+  displayName: "navigationStyles__NavFooter"
+})([""]);
+const NavVideo = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
+  displayName: "navigationStyles__NavVideo"
+})(["position:absolute;top:0;bottom:0;left:28%;z-index:-1;width:100%;height:100%;background:#000;.reveal{width:100%;background:", ";position:absolute;top:0;left:0;bottom:0;}.video{background:#000;position:absolute;height:100%;margin:0%;z-index:-1;video{height:100%;}}"], props => props.theme.blue);
 
 /***/ }),
 
@@ -26354,6 +26927,96 @@ exports.default = _default;
 
 /***/ }),
 
+/***/ "./src/assets/video/pepin-bathtub.mp4":
+/*!********************************************!*\
+  !*** ./src/assets/video/pepin-bathtub.mp4 ***!
+  \********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "static/pepin-bathtub-58ed808c5f19c0bb70f0ab9ca96b9933.mp4");
+
+/***/ }),
+
+/***/ "./src/assets/video/pepin-fresh.mp4":
+/*!******************************************!*\
+  !*** ./src/assets/video/pepin-fresh.mp4 ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "static/pepin-fresh-546458eb831b678d2b2cd3f967e1a2a9.mp4");
+
+/***/ }),
+
+/***/ "./src/assets/video/pepin-home.mp4":
+/*!*****************************************!*\
+  !*** ./src/assets/video/pepin-home.mp4 ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "static/pepin-home-e8dd7ccc20536a14b20e14faff310e99.mp4");
+
+/***/ }),
+
+/***/ "./src/assets/video/pepin-nelson.mp4":
+/*!*******************************************!*\
+  !*** ./src/assets/video/pepin-nelson.mp4 ***!
+  \*******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "static/pepin-nelson-658a12035defb364b28c491a30aa32a4.mp4");
+
+/***/ }),
+
+/***/ "./src/assets/video/pepin-road.mp4":
+/*!*****************************************!*\
+  !*** ./src/assets/video/pepin-road.mp4 ***!
+  \*****************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "static/pepin-road-3cfe5f83c9b10e6b0abbb115c99c3f56.mp4");
+
+/***/ }),
+
+/***/ "./src/assets/video/pepin-sheep.mp4":
+/*!******************************************!*\
+  !*** ./src/assets/video/pepin-sheep.mp4 ***!
+  \******************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "static/pepin-sheep-498a1553fe8153553cd4de21154495d4.mp4");
+
+/***/ }),
+
 /***/ "./src/assets/video/pepin_island.mp4":
 /*!*******************************************!*\
   !*** ./src/assets/video/pepin_island.mp4 ***!
@@ -26369,6 +27032,21 @@ __webpack_require__.r(__webpack_exports__);
 
 /***/ }),
 
+/***/ "./src/assets/video/video.mp4":
+/*!************************************!*\
+  !*** ./src/assets/video/video.mp4 ***!
+  \************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (__webpack_require__.p + "static/video-ec82f4649eb121a9949378671b8de45b.mp4");
+
+/***/ }),
+
 /***/ "./public/page-data/sq/d/3649515864.json":
 /*!***********************************************!*\
   !*** ./public/page-data/sq/d/3649515864.json ***!
@@ -26377,6 +27055,45 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 module.exports = JSON.parse('{"data":{"site":{"siteMetadata":{"title":"My Gatsby Site"}}}}');
+
+/***/ }),
+
+/***/ "./src/assets/video sync recursive ^\\.\\/.*$":
+/*!*****************************************!*\
+  !*** ./src/assets/video/ sync ^\.\/.*$ ***!
+  \*****************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+var map = {
+	"./pepin-bathtub.mp4": "./src/assets/video/pepin-bathtub.mp4",
+	"./pepin-fresh.mp4": "./src/assets/video/pepin-fresh.mp4",
+	"./pepin-home.mp4": "./src/assets/video/pepin-home.mp4",
+	"./pepin-nelson.mp4": "./src/assets/video/pepin-nelson.mp4",
+	"./pepin-road.mp4": "./src/assets/video/pepin-road.mp4",
+	"./pepin-sheep.mp4": "./src/assets/video/pepin-sheep.mp4",
+	"./pepin_island.mp4": "./src/assets/video/pepin_island.mp4",
+	"./video.mp4": "./src/assets/video/video.mp4"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./src/assets/video sync recursive ^\\.\\/.*$";
 
 /***/ }),
 

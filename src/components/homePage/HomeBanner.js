@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react'
-import Videotest from '../../assets/video/pepin_island.mp4'
+import Videotest from '../../assets/video/pepin-home.mp4'
 
 import {
 	Banner,
@@ -94,7 +94,7 @@ const HomeBanner = ({ onCursor }) => {
 	return (
 		<Banner>
 			<Video>
-				<video width="100%" height="100%" loop autoPlay controls muted>
+				<video width="100%" height="100%" loop autoPlay muted>
 					<source src={Videotest} type="video/mp4"/>
 				</video>
 			</Video>
