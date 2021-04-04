@@ -1946,6 +1946,183 @@ module.exports = function (obj, predicate) {
 
 /***/ }),
 
+/***/ "./node_modules/framer-motion/dist/es/animation/animation-controls.js":
+/*!****************************************************************************!*\
+  !*** ./node_modules/framer-motion/dist/es/animation/animation-controls.js ***!
+  \****************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "animationControls": () => (/* binding */ animationControls)
+/* harmony export */ });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! tslib */ "./node_modules/framer-motion/node_modules/tslib/tslib.es6.js");
+/* harmony import */ var hey_listen__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! hey-listen */ "./node_modules/hey-listen/dist/hey-listen.es.js");
+/* harmony import */ var _render_utils_animation_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../render/utils/animation.js */ "./node_modules/framer-motion/dist/es/render/utils/animation.js");
+/* harmony import */ var _render_utils_setters_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../render/utils/setters.js */ "./node_modules/framer-motion/dist/es/render/utils/setters.js");
+
+
+
+
+
+/**
+ * @public
+ */
+function animationControls() {
+    /**
+     * Track whether the host component has mounted.
+     */
+    var hasMounted = false;
+    /**
+     * Pending animations that are started before a component is mounted.
+     * TODO: Remove this as animations should only run in effects
+     */
+    var pendingAnimations = [];
+    /**
+     * A collection of linked component animation controls.
+     */
+    var subscribers = new Set();
+    var controls = {
+        subscribe: function (visualElement) {
+            subscribers.add(visualElement);
+            return function () { return void subscribers.delete(visualElement); };
+        },
+        start: function (definition, transitionOverride) {
+            /**
+             * TODO: We only perform this hasMounted check because in Framer we used to
+             * encourage the ability to start an animation within the render phase. This
+             * isn't behaviour concurrent-safe so when we make Framer concurrent-safe
+             * we can ditch this.
+             */
+            if (hasMounted) {
+                var animations_1 = [];
+                subscribers.forEach(function (visualElement) {
+                    animations_1.push((0,_render_utils_animation_js__WEBPACK_IMPORTED_MODULE_1__.animateVisualElement)(visualElement, definition, {
+                        transitionOverride: transitionOverride,
+                    }));
+                });
+                return Promise.all(animations_1);
+            }
+            else {
+                return new Promise(function (resolve) {
+                    pendingAnimations.push({
+                        animation: [definition, transitionOverride],
+                        resolve: resolve,
+                    });
+                });
+            }
+        },
+        set: function (definition) {
+            (0,hey_listen__WEBPACK_IMPORTED_MODULE_0__.invariant)(hasMounted, "controls.set() should only be called after a component has mounted. Consider calling within a useEffect hook.");
+            return subscribers.forEach(function (visualElement) {
+                (0,_render_utils_setters_js__WEBPACK_IMPORTED_MODULE_2__.setValues)(visualElement, definition);
+            });
+        },
+        stop: function () {
+            subscribers.forEach(function (visualElement) {
+                (0,_render_utils_animation_js__WEBPACK_IMPORTED_MODULE_1__.stopAnimation)(visualElement);
+            });
+        },
+        mount: function () {
+            hasMounted = true;
+            pendingAnimations.forEach(function (_a) {
+                var animation = _a.animation, resolve = _a.resolve;
+                controls.start.apply(controls, (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__spreadArray)([], (0,tslib__WEBPACK_IMPORTED_MODULE_3__.__read)(animation))).then(resolve);
+            });
+            return function () {
+                hasMounted = false;
+                controls.stop();
+            };
+        },
+    };
+    return controls;
+}
+
+
+
+
+/***/ }),
+
+/***/ "./node_modules/framer-motion/dist/es/animation/use-animation.js":
+/*!***********************************************************************!*\
+  !*** ./node_modules/framer-motion/dist/es/animation/use-animation.js ***!
+  \***********************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "useAnimation": () => (/* binding */ useAnimation)
+/* harmony export */ });
+/* harmony import */ var _animation_controls_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./animation-controls.js */ "./node_modules/framer-motion/dist/es/animation/animation-controls.js");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _utils_use_constant_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../utils/use-constant.js */ "./node_modules/framer-motion/dist/es/utils/use-constant.js");
+
+
+
+
+/**
+ * Creates `AnimationControls`, which can be used to manually start, stop
+ * and sequence animations on one or more components.
+ *
+ * The returned `AnimationControls` should be passed to the `animate` property
+ * of the components you want to animate.
+ *
+ * These components can then be animated with the `start` method.
+ *
+ * @library
+ *
+ * ```jsx
+ * import * as React from 'react'
+ * import { Frame, useAnimation } from 'framer'
+ *
+ * export function MyComponent(props) {
+ *    const controls = useAnimation()
+ *
+ *    controls.start({
+ *        x: 100,
+ *        transition: { duration: 0.5 },
+ *    })
+ *
+ *    return <Frame animate={controls} />
+ * }
+ * ```
+ *
+ * @motion
+ *
+ * ```jsx
+ * import * as React from 'react'
+ * import { motion, useAnimation } from 'framer-motion'
+ *
+ * export function MyComponent(props) {
+ *    const controls = useAnimation()
+ *
+ *    controls.start({
+ *        x: 100,
+ *        transition: { duration: 0.5 },
+ *    })
+ *
+ *    return <motion.div animate={controls} />
+ * }
+ * ```
+ *
+ * @returns Animation controller with `start` and `stop` methods
+ *
+ * @public
+ */
+function useAnimation() {
+    var controls = (0,_utils_use_constant_js__WEBPACK_IMPORTED_MODULE_1__.useConstant)(_animation_controls_js__WEBPACK_IMPORTED_MODULE_2__.animationControls);
+    (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(controls.mount, []);
+    return controls;
+}
+
+
+
+
+/***/ }),
+
 /***/ "./node_modules/framer-motion/dist/es/animation/utils/default-transitions.js":
 /*!***********************************************************************************!*\
   !*** ./node_modules/framer-motion/dist/es/animation/utils/default-transitions.js ***!
@@ -14093,17 +14270,162 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var react_intersection_observer__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! react-intersection-observer */ "./node_modules/react-intersection-observer/react-intersection-observer.m.js");
+/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/animation/use-animation.js");
 /* harmony import */ var _styles_globalStyles__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../styles/globalStyles */ "./src/styles/globalStyles.js");
 /* harmony import */ var _styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../styles/homeStyles */ "./src/styles/homeStyles.js");
+ //scroll behavior
+
+
 
 
 
 
 const HomeContent = () => {
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(HomeContent, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_1__.Container, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Content, null, "Pepin Island is 3.5 kilometres long, and up to 2.1 kilometres wide. ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "It measures 5.18 square kilometresin area. The highest point is Stuart Hill, which rises to 401 metres. The island is located on the northeast coast of Tasman Bay / Te Tai-o-Aorere, with the smaller indentation of Delaware Bay to the east. It is joined to the mainland by a naturally formed pathway made from boulders that have tumbled down nearby hillsides then been shaped into a causeway by the sea.")));
+  const animation = (0,framer_motion__WEBPACK_IMPORTED_MODULE_3__.useAnimation)();
+  const [contentRef, inView] = (0,react_intersection_observer__WEBPACK_IMPORTED_MODULE_4__.useInView)({
+    triggerOnce: true,
+    rootMargin: '-300px'
+  });
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (inView) {
+      animation.start('visible');
+    }
+  }, [animation, inView]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.HomeContentSection, {
+    ref: contentRef,
+    animate: animation,
+    initial: "hidden",
+    variants: {
+      visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+          duration: 0.6,
+          ease: [0.6, 0.05, -0.01, 0.9]
+        }
+      },
+      hidden: {
+        opacity: 0,
+        y: 72
+      }
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_1__.Container, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_2__.Content, null, "Pepin Island is 3.5 kilometres long, and up to 2.1 kilometres wide. ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "It measures 5.18 square kilometresin area. The highest point is Stuart Hill, which rises to 401 metres. ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "The island is located on the northeast coast of Tasman Bay, with the smaller indentation of Delaware Bay to the east. ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), "It is joined to the mainland by a naturally formed pathway made from boulders that have tumbled down nearby hillsides then been shaped into a causeway by the sea.")));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (HomeContent);
+
+/***/ }),
+
+/***/ "./src/components/homePage/HomeFeatured.js":
+/*!*************************************************!*\
+  !*** ./src/components/homePage/HomeFeatured.js ***!
+  \*************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var gatsby__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! gatsby */ "./.cache/gatsby-browser-entry.js");
+/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/render/dom/motion.js");
+/* harmony import */ var react_intersection_observer__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! react-intersection-observer */ "./node_modules/react-intersection-observer/react-intersection-observer.m.js");
+/* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/animation/use-animation.js");
+/* harmony import */ var _styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../styles/globalStyles */ "./src/styles/globalStyles.js");
+/* harmony import */ var _styles_homeStyles__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../styles/homeStyles */ "./src/styles/homeStyles.js");
+
+
+ //scroll behavior
+
+
+ //styled components
+
+
+
+
+const HomeFeatured = ({
+  onCursor
+}) => {
+  const {
+    0: hovered,
+    1: setHovered
+  } = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(false);
+  const animation = (0,framer_motion__WEBPACK_IMPORTED_MODULE_4__.useAnimation)();
+  const [featuredRef, inView] = (0,react_intersection_observer__WEBPACK_IMPORTED_MODULE_5__.useInView)({
+    triggerOnce: true,
+    rootMargin: '-300px'
+  });
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {
+    if (inView) {
+      animation.start('visible');
+    }
+  }, [animation, inView]);
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_3__.HomeFeaturedSection, {
+    ref: featuredRef,
+    animate: animation,
+    initial: "hidden",
+    variants: {
+      visible: {
+        opacity: 1,
+        y: 0,
+        transition: {
+          duration: 0.6,
+          ease: [0.6, 0.05, -0.01, 0.9]
+        }
+      },
+      hidden: {
+        opacity: 0,
+        y: 72
+      }
+    }
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__.Container, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(gatsby__WEBPACK_IMPORTED_MODULE_1__.Link, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_3__.FeaturedContent, {
+    onHoverStart: () => setHovered(!hovered),
+    onHoverEnd: () => setHovered(!hovered),
+    onMouseEnter: () => onCursor('hovered'),
+    onMouseLeave: onCursor
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__.Flex, {
+    spaceBetween: true
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h3", null, "Featured Project"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_6__.motion.div, {
+    animate: {
+      opacity: hovered ? 1 : 0
+    },
+    transition: {
+      duraton: 0.6,
+      ease: [0.6, 0.05, -0.01, 0.9]
+    },
+    className: "meta"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "PEI Seafood"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h4", null, "2019"))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("h2", {
+    className: "featured-title"
+  }, "NOT ", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("br", null), " HUMBLE", /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", {
+    className: "arrow"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(framer_motion__WEBPACK_IMPORTED_MODULE_6__.motion.svg, {
+    animate: {
+      x: hovered ? 48 : 0
+    },
+    transition: {
+      duraton: 0.6,
+      ease: [0.6, 0.05, -0.01, 0.9]
+    },
+    xmlns: "http://www.w3.org/2000/svg",
+    viewBox: "0 0 101 57"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("path", {
+    d: "M33 34H0V24h81.429L66 7.884 73.548 0l19.877 20.763.027-.029L101 28.618 73.829 57l-7.548-7.884L80.753 34H33z",
+    fill: "#FFF",
+    fillRule: "evenodd"
+  }))))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_3__.FeaturedVideo, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("video", {
+    loop: true,
+    autoPlay: true,
+    muted: true,
+    src: __webpack_require__(/*! ../../assets/video/pepin-home.mp4 */ "./src/assets/video/pepin-home.mp4").default
+  })))), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__.Container, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_homeStyles__WEBPACK_IMPORTED_MODULE_3__.FeaturedProjects, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_styles_globalStyles__WEBPACK_IMPORTED_MODULE_2__.Flex, {
+    flexEnd: true
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("button", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement("span", null, "All projects"))))));
+};
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (HomeFeatured);
 
 /***/ }),
 
@@ -14566,10 +14888,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _context_globalContext__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../context/globalContext */ "./src/context/globalContext.js");
 /* harmony import */ var _components_homePage_HomeBanner__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../components/homePage/HomeBanner */ "./src/components/homePage/HomeBanner.js");
 /* harmony import */ var _components_homePage_HomeContent__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../components/homePage/HomeContent */ "./src/components/homePage/HomeContent.js");
+/* harmony import */ var _components_homePage_HomeFeatured__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../components/homePage/HomeFeatured */ "./src/components/homePage/HomeFeatured.js");
 
  //context
 
  //components
+
 
 
 
@@ -14602,7 +14926,9 @@ const IndexPage = props => {
     key: key
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_layout__WEBPACK_IMPORTED_MODULE_1__.default, null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_homePage_HomeBanner__WEBPACK_IMPORTED_MODULE_3__.default, {
     onCursor: onCursor
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_homePage_HomeContent__WEBPACK_IMPORTED_MODULE_4__.default, null)));
+  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_homePage_HomeContent__WEBPACK_IMPORTED_MODULE_4__.default, null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default().createElement(_components_homePage_HomeFeatured__WEBPACK_IMPORTED_MODULE_5__.default, {
+    onCursor: onCursor
+  })));
 };
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (IndexPage);
@@ -14680,7 +15006,11 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "BannerTitle": () => (/* binding */ BannerTitle),
 /* harmony export */   "Headline": () => (/* binding */ Headline),
 /* harmony export */   "HomeContentSection": () => (/* binding */ HomeContentSection),
-/* harmony export */   "Content": () => (/* binding */ Content)
+/* harmony export */   "Content": () => (/* binding */ Content),
+/* harmony export */   "HomeFeaturedSection": () => (/* binding */ HomeFeaturedSection),
+/* harmony export */   "FeaturedContent": () => (/* binding */ FeaturedContent),
+/* harmony export */   "FeaturedVideo": () => (/* binding */ FeaturedVideo),
+/* harmony export */   "FeaturedProjects": () => (/* binding */ FeaturedProjects)
 /* harmony export */ });
 /* harmony import */ var styled_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! styled-components */ "./node_modules/styled-components/dist/styled-components.esm.js");
 /* harmony import */ var framer_motion__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! framer-motion */ "./node_modules/framer-motion/dist/es/render/dom/motion.js");
@@ -14702,12 +15032,24 @@ const Headline = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.default)(fram
   displayName: "homeStyles__Headline"
 })(["display:block;font-size:15rem;font-weight:900;line-height:0.76;"]); //content section
 
-const HomeContentSection = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
+const HomeContentSection = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.default)(framer_motion__WEBPACK_IMPORTED_MODULE_1__.motion.div).withConfig({
   displayName: "homeStyles__HomeContentSection"
-})([""]);
+})(["margin-bottom:200px;"]);
 const Content = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.h2.withConfig({
   displayName: "homeStyles__Content"
-})([""]);
+})(["width:53%;font-size:2.3rem;font-weight:400;margin-left:124px;color:", ";"], props => props.theme.text);
+const HomeFeaturedSection = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.default)(framer_motion__WEBPACK_IMPORTED_MODULE_1__.motion.div).withConfig({
+  displayName: "homeStyles__HomeFeaturedSection"
+})(["margin-bottom:200px;position:relative;a{margin-bottom:200px;position:relative;display:block;}"]);
+const FeaturedContent = (0,styled_components__WEBPACK_IMPORTED_MODULE_0__.default)(framer_motion__WEBPACK_IMPORTED_MODULE_1__.motion.div).withConfig({
+  displayName: "homeStyles__FeaturedContent"
+})(["height:480px;width:100%;padding:56px 124px;box-sizing:border-box;color:", ";h3{font-size:1.4rem;}.meta{display:flex;h4{&:last-child{margin-left:1rem;}}}.featured-title{position:absolute;bottom:-128px;font-size:7rem;font-weight:900;line-height:90px;margin:0;}.arrow{width:120px;height:80px;display:block;position:relative;overflow:hidden;svg{position:absolute;top:16px;left:-48px;width:108px;path{fill:", ";}}}"], props => props.theme.text, props => props.theme.text);
+const FeaturedVideo = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
+  displayName: "homeStyles__FeaturedVideo"
+})(["position:absolute;z-index:-1;width:100%;height:480px;top:0;display:block;overflow:hidden;"]);
+const FeaturedProjects = styled_components__WEBPACK_IMPORTED_MODULE_0__.default.div.withConfig({
+  displayName: "homeStyles__FeaturedProjects"
+})(["margin-top:200px;button{background:", ";color:#fff;position:relative;padding:20px;display:block;text-align:left;font-size:1.4rem;line-height:1;font-weight:600;border:none;span{margin-right:100px;display:block;}&:before,&:after{content:'';position:absolute;top:50%;right:20px;width:35px;height:7px;display:block;background:#fff;transform:translateY(-50%);}&:before{margin-top:-8px;}&:after{margin-top:8px;}}"], props => props.theme.blue);
 
 /***/ }),
 
@@ -25694,6 +26036,394 @@ HelmetExport.renderStatic = HelmetExport.rewind;
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (HelmetExport);
 
+
+
+/***/ }),
+
+/***/ "./node_modules/react-intersection-observer/react-intersection-observer.m.js":
+/*!***********************************************************************************!*\
+  !*** ./node_modules/react-intersection-observer/react-intersection-observer.m.js ***!
+  \***********************************************************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   "InView": () => (/* binding */ InView),
+/* harmony export */   "useInView": () => (/* binding */ useInView)
+/* harmony export */ });
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "react");
+/* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
+
+
+function _extends() {
+  _extends = Object.assign || function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+
+  return _extends.apply(this, arguments);
+}
+
+function _inheritsLoose(subClass, superClass) {
+  subClass.prototype = Object.create(superClass.prototype);
+  subClass.prototype.constructor = subClass;
+  subClass.__proto__ = superClass;
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+var ObserverMap = new Map();
+var RootIds = new Map();
+var rootId = 0;
+/**
+ * Generate a unique ID for the root element
+ * @param root
+ */
+
+function getRootId(root) {
+  if (!root) return '0';
+  if (RootIds.has(root)) return RootIds.get(root);
+  rootId += 1;
+  RootIds.set(root, rootId.toString());
+  return RootIds.get(root);
+}
+/**
+ * Convert the options to a string Id, based on the values.
+ * Ensures we can reuse the same observer when observing elements with the same options.
+ * @param options
+ */
+
+
+function optionsToId(options) {
+  return Object.keys(options).sort().filter(function (key) {
+    return options[key] !== undefined;
+  }).map(function (key) {
+    return key + "_" + (key === 'root' ? getRootId(options.root) : options[key]);
+  }).toString();
+}
+
+function createObserver(options) {
+  // Create a unique ID for this observer instance, based on the root, root margin and threshold.
+  var id = optionsToId(options);
+  var instance = ObserverMap.get(id);
+
+  if (!instance) {
+    // Create a map of elements this observer is going to observe. Each element has a list of callbacks that should be triggered, once it comes into view.
+    var elements = new Map();
+    var thresholds;
+    var observer = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        var _elements$get;
+
+        // While it would be nice if you could just look at isIntersecting to determine if the component is inside the viewport, browsers can't agree on how to use it.
+        // -Firefox ignores `threshold` when considering `isIntersecting`, so it will never be false again if `threshold` is > 0
+        var inView = entry.isIntersecting && thresholds.some(function (threshold) {
+          return entry.intersectionRatio >= threshold;
+        }); // @ts-ignore support IntersectionObserver v2
+
+        if (options.trackVisibility && typeof entry.isVisible === 'undefined') {
+          // The browser doesn't support Intersection Observer v2, falling back to v1 behavior.
+          // @ts-ignore
+          entry.isVisible = inView;
+        }
+
+        (_elements$get = elements.get(entry.target)) == null ? void 0 : _elements$get.forEach(function (callback) {
+          callback(inView, entry);
+        });
+      });
+    }, options); // Ensure we have a valid thresholds array. If not, use the threshold from the options
+
+    thresholds = observer.thresholds || (Array.isArray(options.threshold) ? options.threshold : [options.threshold || 0]);
+    instance = {
+      id: id,
+      observer: observer,
+      elements: elements
+    };
+    ObserverMap.set(id, instance);
+  }
+
+  return instance;
+}
+
+function observe(element, callback, options) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  if (!element) return function () {}; // An observer with the same options can be reused, so lets use this fact
+
+  var _createObserver = createObserver(options),
+      id = _createObserver.id,
+      observer = _createObserver.observer,
+      elements = _createObserver.elements; // Register the callback listener for this element
+
+
+  var callbacks = elements.get(element) || [];
+
+  if (!elements.has(element)) {
+    elements.set(element, callbacks);
+  }
+
+  callbacks.push(callback);
+  observer.observe(element);
+  return function unobserve() {
+    // Remove the callback from the callback list
+    callbacks.splice(callbacks.indexOf(callback), 1);
+
+    if (callbacks.length === 0) {
+      // No more callback exists for element, so destroy it
+      elements["delete"](element);
+      observer.unobserve(element);
+    }
+
+    if (elements.size === 0) {
+      // No more elements are being observer by this instance, so destroy it
+      observer.disconnect();
+      ObserverMap["delete"](id);
+    }
+  };
+}
+
+function isPlainChildren(props) {
+  return typeof props.children !== 'function';
+}
+/**
+ * Monitors scroll, and triggers the children function with updated props
+ */
+
+
+var InView = /*#__PURE__*/function (_React$Component) {
+  _inheritsLoose(InView, _React$Component);
+
+  function InView(props) {
+    var _this;
+
+    _this = _React$Component.call(this, props) || this;
+    _this.node = null;
+    _this._unobserveCb = null;
+
+    _this.handleNode = function (node) {
+      if (_this.node) {
+        // Clear the old observer, before we start observing a new element
+        _this.unobserve();
+
+        if (!node && !_this.props.triggerOnce && !_this.props.skip) {
+          // Reset the state if we get a new node, and we aren't ignoring updates
+          _this.setState({
+            inView: !!_this.props.initialInView,
+            entry: undefined
+          });
+        }
+      }
+
+      _this.node = node ? node : null;
+
+      _this.observeNode();
+    };
+
+    _this.handleChange = function (inView, entry) {
+      if (inView && _this.props.triggerOnce) {
+        // If `triggerOnce` is true, we should stop observing the element.
+        _this.unobserve();
+      }
+
+      if (!isPlainChildren(_this.props)) {
+        // Store the current State, so we can pass it to the children in the next render update
+        // There's no reason to update the state for plain children, since it's not used in the rendering.
+        _this.setState({
+          inView: inView,
+          entry: entry
+        });
+      }
+
+      if (_this.props.onChange) {
+        // If the user is actively listening for onChange, always trigger it
+        _this.props.onChange(inView, entry);
+      }
+    };
+
+    _this.state = {
+      inView: !!props.initialInView,
+      entry: undefined
+    };
+    return _this;
+  }
+
+  var _proto = InView.prototype;
+
+  _proto.componentDidUpdate = function componentDidUpdate(prevProps) {
+    // If a IntersectionObserver option changed, reinit the observer
+    if (prevProps.rootMargin !== this.props.rootMargin || prevProps.root !== this.props.root || prevProps.threshold !== this.props.threshold || prevProps.skip !== this.props.skip || prevProps.trackVisibility !== this.props.trackVisibility || prevProps.delay !== this.props.delay) {
+      this.unobserve();
+      this.observeNode();
+    }
+  };
+
+  _proto.componentWillUnmount = function componentWillUnmount() {
+    this.unobserve();
+    this.node = null;
+  };
+
+  _proto.observeNode = function observeNode() {
+    if (!this.node || this.props.skip) return;
+    var _this$props = this.props,
+        threshold = _this$props.threshold,
+        root = _this$props.root,
+        rootMargin = _this$props.rootMargin,
+        trackVisibility = _this$props.trackVisibility,
+        delay = _this$props.delay;
+    this._unobserveCb = observe(this.node, this.handleChange, {
+      threshold: threshold,
+      root: root,
+      rootMargin: rootMargin,
+      // @ts-ignore
+      trackVisibility: trackVisibility,
+      // @ts-ignore
+      delay: delay
+    });
+  };
+
+  _proto.unobserve = function unobserve() {
+    if (this._unobserveCb) {
+      this._unobserveCb();
+
+      this._unobserveCb = null;
+    }
+  };
+
+  _proto.render = function render() {
+    if (!isPlainChildren(this.props)) {
+      var _this$state = this.state,
+          inView = _this$state.inView,
+          entry = _this$state.entry;
+      return this.props.children({
+        inView: inView,
+        entry: entry,
+        ref: this.handleNode
+      });
+    }
+
+    var _this$props2 = this.props,
+        children = _this$props2.children,
+        as = _this$props2.as,
+        tag = _this$props2.tag,
+        props = _objectWithoutPropertiesLoose(_this$props2, ["children", "as", "tag", "triggerOnce", "threshold", "root", "rootMargin", "onChange", "skip", "trackVisibility", "delay", "initialInView"]);
+
+    return /*#__PURE__*/(0,react__WEBPACK_IMPORTED_MODULE_0__.createElement)(as || tag || 'div', _extends({
+      ref: this.handleNode
+    }, props), children);
+  };
+
+  return InView;
+}(react__WEBPACK_IMPORTED_MODULE_0__.Component);
+InView.displayName = 'InView';
+InView.defaultProps = {
+  threshold: 0,
+  triggerOnce: false,
+  initialInView: false
+};
+
+function useInView(_temp) {
+  var _ref = _temp === void 0 ? {} : _temp,
+      threshold = _ref.threshold,
+      delay = _ref.delay,
+      trackVisibility = _ref.trackVisibility,
+      rootMargin = _ref.rootMargin,
+      root = _ref.root,
+      triggerOnce = _ref.triggerOnce,
+      skip = _ref.skip,
+      initialInView = _ref.initialInView;
+
+  var unobserve = (0,react__WEBPACK_IMPORTED_MODULE_0__.useRef)();
+
+  var _React$useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({
+    inView: !!initialInView
+  }),
+      state = _React$useState[0],
+      setState = _React$useState[1];
+
+  var setRef = (0,react__WEBPACK_IMPORTED_MODULE_0__.useCallback)(function (node) {
+    if (unobserve.current !== undefined) {
+      unobserve.current();
+      unobserve.current = undefined;
+    } // Skip creating the observer
+
+
+    if (skip) return;
+
+    if (node) {
+      unobserve.current = observe(node, function (inView, entry) {
+        setState({
+          inView: inView,
+          entry: entry
+        });
+
+        if (entry.isIntersecting && triggerOnce && unobserve.current) {
+          // If it should only trigger once, unobserve the element after it's inView
+          unobserve.current();
+          unobserve.current = undefined;
+        }
+      }, {
+        root: root,
+        rootMargin: rootMargin,
+        threshold: threshold,
+        // @ts-ignore
+        trackVisibility: trackVisibility,
+        // @ts-ignore
+        delay: delay
+      });
+    }
+  }, // We break the rule here, because we aren't including the actual `threshold` variable
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [// If the threshold is an array, convert it to a string so it won't change between renders.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  Array.isArray(threshold) ? threshold.toString() : threshold, root, rootMargin, triggerOnce, skip, trackVisibility, delay]);
+  /* eslint-disable-next-line */
+
+  (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
+    if (!unobserve.current && state.entry && !triggerOnce && !skip) {
+      // If we don't have a ref, then reset the state (unless the hook is set to only `triggerOnce` or `skip`)
+      // This ensures we correctly reflect the current state - If you aren't observing anything, then nothing is inView
+      setState({
+        inView: !!initialInView
+      });
+    }
+  });
+  var result = [setRef, state.inView, state.entry]; // Support object destructuring, by adding the specific values.
+
+  result.ref = result[0];
+  result.inView = result[1];
+  result.entry = result[2];
+  return result;
+}
+
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (InView);
+
+//# sourceMappingURL=react-intersection-observer.m.js.map
 
 
 /***/ }),
