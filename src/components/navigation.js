@@ -36,7 +36,7 @@ const navRoutes = [
 	},
 	{
 		id: 3,
-		title: 'there is sheep',
+		title: 'there are sheep',
 		path:'/it-takes-an-island',
 		video: "pepin-sheep.mp4",
 	},
